@@ -1,0 +1,265 @@
+{
+  "fonte": "MOC BP-e v1.00b (abril/2019) — Manual de Orientações do Contribuinte, Padrões Técnicos de Comunicação",
+  "descricao": "Regras de validação de transporte, mensagem, forma do XML, certificado de assinatura e assinatura digital (aplicáveis a todos os Web Services).",
+  "grupos": {
+    "A": {
+      "nome": "Validação do Certificado Digital do Transmissor (protocolo TLS)",
+      "secao_moc": "4.1.4 / 4.2.4 / 4.3.4 / 6.4",
+      "observacao": "A01–A05 são verificadas pelo próprio protocolo TLS. A06 também pode ser, mas pode falhar se o servidor tiver outras ACs raiz.",
+      "regras": [
+        {
+          "id": "A01",
+          "cStat": 280,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Certificado de Transmissor inválido: inexistente na mensagem, versão difere de 3, Basic Constraint de AC ou KeyUsage sem 'Autenticação Cliente'.",
+          "acao_corretiva": "Use um certificado ICP-Brasil A1/A3 X.509 v3 de usuário final, com Extended Key Usage 'Autenticação Cliente', configurado na conexão TLS (mTLS)."
+        },
+        {
+          "id": "A02",
+          "cStat": 281,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Validade do Certificado do Transmissor (data início e data fim).",
+          "acao_corretiva": "Renove o certificado digital de transmissão; confira o relógio do servidor."
+        },
+        {
+          "id": "A03",
+          "cStat": 283,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Cadeia de certificação do Transmissor: AC emissora não cadastrada na SEFAZ, AC revogada ou certificado não assinado pela AC emissora.",
+          "acao_corretiva": "Use certificado emitido por AC credenciada ICP-Brasil e envie a cadeia completa na conexão TLS."
+        },
+        {
+          "id": "A04",
+          "cStat": 286,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "LCR do certificado de Transmissor: falta CRL DistributionPoint, LCR indisponível ou inválida.",
+          "acao_corretiva": "Verifique se o certificado tem ponto de distribuição de LCR; tente novamente mais tarde se a LCR da AC estiver indisponível."
+        },
+        {
+          "id": "A05",
+          "cStat": 284,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Certificado do Transmissor revogado.",
+          "acao_corretiva": "Emita/adquira um novo certificado digital."
+        },
+        {
+          "id": "A06",
+          "cStat": 285,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Certificado Raiz difere da 'ICP-Brasil'.",
+          "acao_corretiva": "Utilize apenas certificados da hierarquia ICP-Brasil."
+        },
+        {
+          "id": "A07",
+          "cStat": 282,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Falta a extensão de CNPJ no certificado (otherName OID 2.16.76.1.3.3).",
+          "acao_corretiva": "Utilize certificado e-CNPJ (pessoa jurídica) que contenha o OID 2.16.76.1.3.3."
+        }
+      ]
+    },
+    "B": {
+      "nome": "Validação Inicial da Mensagem no Web Service",
+      "secao_moc": "4.1.4",
+      "observacao": "Mensagem acima de 1024 KB pode ter a conexão interrompida sem mensagem de erro (firewall).",
+      "regras": [
+        {
+          "id": "B00",
+          "cStat": 244,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Verificar compactação da mensagem da área de dados (somente bpeRecepcao). Todas as validações seguintes são aplicadas ao XML já descompactado.",
+          "acao_corretiva": "Compacte o XML do BP-e com GZip e converta para Base64 antes de colocá-lo em bpeDadosMsg; não compacte os demais serviços.",
+          "aplica_a": [
+            "bpeRecepcao"
+          ]
+        },
+        {
+          "id": "B01",
+          "cStat": 214,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Tamanho do XML de dados superior a 1024 KB.",
+          "acao_corretiva": "Reduza o XML: remova tags opcionais vazias/zeradas, espaços e quebras de linha. O limite é 1024 KB."
+        },
+        {
+          "id": "B02",
+          "cStat": 243,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "XML de dados mal formado.",
+          "acao_corretiva": "Valide o XML com um parser antes do envio; verifique escape de caracteres especiais (&, <, >, \", ')."
+        },
+        {
+          "id": "B03",
+          "cStat": 108,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Serviço de processamento paralisado momentaneamente.",
+          "acao_corretiva": "Aguarde e consulte o status do serviço (respeitando 3 minutos entre consultas); avalie contingência off-line se a UF permitir."
+        },
+        {
+          "id": "B04",
+          "cStat": 109,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Serviço de processamento paralisado sem previsão.",
+          "acao_corretiva": "Acione a contingência off-line (tpEmis=2) se permitida pela UF e retransmita quando o serviço voltar."
+        }
+      ]
+    },
+    "C": {
+      "nome": "Validações de Forma da Área de Dados",
+      "secao_moc": "4.1.5",
+      "regras": [
+        {
+          "id": "C01",
+          "cStat": 215,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Verificar Schema XML da área de dados.",
+          "acao_corretiva": "Valide o XML contra o XSD do Pacote de Liberação vigente (PL_BPe) antes do envio; o xMotivo costuma indicar o elemento com erro."
+        },
+        {
+          "id": "C02",
+          "cStat": 598,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Existência de namespace diverso do padrão do projeto (http://www.portalfiscal.inf.br/bpe).",
+          "acao_corretiva": "Declare um único namespace no elemento raiz (xmlns=\"http://www.portalfiscal.inf.br/bpe\"); apenas <Signature> declara o namespace xmldsig."
+        },
+        {
+          "id": "C03",
+          "cStat": 599,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Existência de caracteres de edição no início ou fim da mensagem ou entre as tags.",
+          "acao_corretiva": "Remova line-feed, carriage return, tab e espaços entre as tags; gere o XML minificado."
+        },
+        {
+          "id": "C04",
+          "cStat": 404,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Uso de prefixo no namespace.",
+          "acao_corretiva": "Não use prefixos (ex.: <bpe:BPe>); use namespace padrão sem prefixo."
+        },
+        {
+          "id": "C05",
+          "cStat": 402,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "XML com codificação diferente de UTF-8.",
+          "acao_corretiva": "Gere o XML em UTF-8 com a declaração <?xml version=\"1.0\" encoding=\"UTF-8\"?>."
+        },
+        {
+          "id": "C06",
+          "cStat": 239,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Versão do XML não suportada.",
+          "acao_corretiva": "Informe no atributo versao a versão de leiaute vigente (ex.: 1.00) e use os schemas correspondentes."
+        }
+      ]
+    },
+    "D": {
+      "nome": "Validações do Certificado de Assinatura",
+      "secao_moc": "5.1 / 6.6",
+      "regras": [
+        {
+          "id": "D01",
+          "cStat": 290,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Certificado de assinatura inválido: inexistente, versão difere de 3, Basic Constraint = true (AC) ou KeyUsage inadequado.",
+          "acao_corretiva": "Assine com certificado ICP-Brasil A1/A3 de usuário final, com uso de chave para assinatura digital."
+        },
+        {
+          "id": "D02",
+          "cStat": 291,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Validade do certificado de assinatura (data início e data fim).",
+          "acao_corretiva": "Renove o certificado de assinatura."
+        },
+        {
+          "id": "D03",
+          "cStat": 292,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Falta a extensão de CNPJ no certificado de assinatura (otherName OID 2.16.76.1.3.3).",
+          "acao_corretiva": "Use e-CNPJ do estabelecimento emissor ou da matriz."
+        },
+        {
+          "id": "D04",
+          "cStat": 293,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Cadeia de certificação do certificado de assinatura inválida.",
+          "acao_corretiva": "Use certificado emitido por AC credenciada ICP-Brasil."
+        },
+        {
+          "id": "D05",
+          "cStat": 296,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "LCR do certificado de assinatura: falta CRL DistributionPoint ou erro no acesso à LCR.",
+          "acao_corretiva": "Verifique o ponto de distribuição da LCR; tente novamente mais tarde."
+        },
+        {
+          "id": "D06",
+          "cStat": 294,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Certificado de assinatura revogado.",
+          "acao_corretiva": "Adquira novo certificado digital."
+        },
+        {
+          "id": "D07",
+          "cStat": 295,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Certificado raiz difere da 'ICP-Brasil'.",
+          "acao_corretiva": "Use certificado da hierarquia ICP-Brasil."
+        }
+      ]
+    },
+    "E": {
+      "nome": "Validações da Assinatura Digital",
+      "secao_moc": "5.2 / 6.7",
+      "regras": [
+        {
+          "id": "E01",
+          "cStat": 298,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Assinatura difere do padrão do projeto: falta Reference URI (atributo Id não assinado) ou faltam os Transform 'Enveloped' e 'C14N'.",
+          "acao_corretiva": "Assine <infBPe>/<infEvento> por Id com Reference URI=\"#Id\", Transforms enveloped-signature + C14N (REC-xml-c14n-20010315), RSA-SHA1 e SHA-1."
+        },
+        {
+          "id": "E02",
+          "cStat": 297,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Valor da assinatura (SignatureValue) difere do valor calculado.",
+          "acao_corretiva": "Não altere o XML após assinar (nem formatação); canonicalize com C14N e assine o XML exatamente como será enviado."
+        },
+        {
+          "id": "E03",
+          "cStat": 213,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "CNPJ-Base do emitente/autor difere do CNPJ-Base do certificado digital.",
+          "acao_corretiva": "Assine com certificado cujo CNPJ base (8 primeiros dígitos) seja o do emitente do BP-e."
+        }
+      ]
+    }
+  }
+}

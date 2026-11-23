@@ -1,0 +1,2637 @@
+{
+  "fonte": "MOC BP-e v1.00b (abril/2019) — Manual de Orientações do Contribuinte, Padrões Técnicos de Comunicação",
+  "secao_moc": "8.2",
+  "descricao": "Tabela completa de códigos de status (cStat) do BP-e: resultados do processamento (1xx) e motivos de não atendimento (2xx–9xx), com índice para as regras de validação que os geram.",
+  "total": 182,
+  "codigos": [
+    {
+      "cStat": 100,
+      "tipo": "sucesso",
+      "mensagem": "Autorizado o uso do BP-e",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "BP-e autorizado: armazene o XML com protocolo (bpeProc) e imprima o DABPE."
+    },
+    {
+      "cStat": 101,
+      "tipo": "sucesso",
+      "mensagem": "Cancelamento de BP-e homologado",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "Cancelamento homologado: BP-e sem valor fiscal."
+    },
+    {
+      "cStat": 102,
+      "tipo": "sucesso",
+      "mensagem": "Substituição de BP-e homologada",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "Substituição homologada: o BP-e original foi substituído."
+    },
+    {
+      "cStat": 107,
+      "tipo": "sucesso",
+      "mensagem": "Serviço em Operação",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "Serviço em operação. Próxima consulta de status somente após 3 minutos."
+    },
+    {
+      "cStat": 108,
+      "tipo": "sucesso",
+      "mensagem": "Serviço Paralisado Momentaneamente (curto prazo)",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "Serviço paralisado momentaneamente: aguarde e tente mais tarde; avalie contingência off-line.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "B",
+          "id": "B03"
+        },
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "H",
+          "id": "H02"
+        }
+      ]
+    },
+    {
+      "cStat": 109,
+      "tipo": "sucesso",
+      "mensagem": "Serviço Paralisado sem Previsão",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "Serviço paralisado sem previsão: acione a contingência off-line (tpEmis=2) se a UF permitir.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "B",
+          "id": "B04"
+        },
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "H",
+          "id": "H03"
+        }
+      ]
+    },
+    {
+      "cStat": 134,
+      "tipo": "sucesso",
+      "mensagem": "Evento registrado com alerta para situação",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "Evento registrado, mas o BP-e está em situação diferente de Autorizado (alerta)."
+    },
+    {
+      "cStat": 135,
+      "tipo": "sucesso",
+      "mensagem": "Evento registrado e vinculado a BP-e",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "Evento registrado e vinculado ao BP-e."
+    },
+    {
+      "cStat": 136,
+      "tipo": "sucesso",
+      "mensagem": "Evento registrado, mas não vinculado a BP-e",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "Evento registrado sem vínculo (BP-e inexistente no momento do recebimento)."
+    },
+    {
+      "cStat": 137,
+      "tipo": "sucesso",
+      "mensagem": "Nenhum documento localizado",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "Nenhum documento localizado."
+    },
+    {
+      "cStat": 138,
+      "tipo": "sucesso",
+      "mensagem": "Documento localizado",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "Documento localizado."
+    },
+    {
+      "cStat": 150,
+      "tipo": "sucesso",
+      "mensagem": "Autorizado o uso do BP-e, autorização fora do prazo",
+      "categoria": "sucesso/processamento",
+      "acao_corretiva": "Autorizado fora do prazo (contingência transmitida após 24h): armazene normalmente; revise o processo de transmissão."
+    },
+    {
+      "cStat": 203,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Emissor não habilitado para emissão do BP-e",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Solicite o credenciamento para BP-e junto à SEFAZ da UF (e no ambiente correto: homologação/produção).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F31"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J03",
+          "evento": "110111"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J03",
+          "evento": "110115"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J03",
+          "evento": "110116"
+        }
+      ]
+    },
+    {
+      "cStat": 204,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Duplicidade de BP-e",
+      "categoria": "regra_negocio",
+      "complemento_xMotivo": "[nProt:999999999999999][dhAut: AAAA-MM-DDTHH:MM:SS TZD]",
+      "acao_corretiva": "O BP-e já está autorizado: consulte a situação (bpeConsultaBP) para obter o protocolo em vez de reenviar.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F99"
+        }
+      ]
+    },
+    {
+      "cStat": 205,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Emitente em situação irregular perante o Fisco",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Regularize a situação cadastral/fiscal junto à SEFAZ.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F34"
+        }
+      ]
+    },
+    {
+      "cStat": 207,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CNPJ do emitente inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija o CNPJ do emitente.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F28"
+        }
+      ]
+    },
+    {
+      "cStat": 209,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: IE do emitente inválida",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija a IE do emitente conforme o formato da UF.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F30"
+        }
+      ]
+    },
+    {
+      "cStat": 211,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Dados de identificação do passageiro devem ser informados para interestadual",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe os dados do passageiro (nome, documento) em viagens interestaduais.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F18"
+        }
+      ]
+    },
+    {
+      "cStat": 212,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Data/hora de emissão BP-e posterior a data/hora de recebimento",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Sincronize o relógio do servidor (NTP) e informe dhEmi com o fuso correto (ex.: -03:00).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F51"
+        }
+      ]
+    },
+    {
+      "cStat": 213,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CNPJ-Base do Emitente difere do CNPJ-Base do Certificado Digital",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Assine com certificado cujo CNPJ base (8 primeiros dígitos) seja o do emitente do BP-e.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "E",
+          "id": "E03"
+        }
+      ]
+    },
+    {
+      "cStat": 214,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Tamanho da mensagem excedeu o limite estabelecido",
+      "categoria": "estrutura_xml",
+      "acao_corretiva": "Reduza o XML: remova tags opcionais vazias/zeradas, espaços e quebras de linha. O limite é 1024 KB.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "B",
+          "id": "B01"
+        }
+      ]
+    },
+    {
+      "cStat": 215,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Falha no schema XML",
+      "categoria": "estrutura_xml",
+      "acao_corretiva": "Valide o XML contra o XSD do Pacote de Liberação vigente (PL_BPe) antes do envio; o xMotivo costuma indicar o elemento com erro.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "C",
+          "id": "C01"
+        }
+      ]
+    },
+    {
+      "cStat": 216,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Chave de Acesso difere da cadastrada",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Use a chave exatamente como autorizada.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "G",
+          "id": "G06"
+        }
+      ]
+    },
+    {
+      "cStat": 217,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e não consta na base de dados da SEFAZ",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Confirme se o BP-e foi transmitido; se emitido em contingência, transmita-o.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "G",
+          "id": "G05"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I19"
+        }
+      ]
+    },
+    {
+      "cStat": 218,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e já está cancelado na base de dados da SEFAZ.",
+      "categoria": "regra_negocio",
+      "complemento_xMotivo": "[nProt:999999999999999][dhCanc: AAAA-MM-DDTHH:MM:SS TZD]",
+      "acao_corretiva": "Documento já cancelado; não reenvie.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F100"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J05",
+          "evento": "110111"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J05",
+          "evento": "110115"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J05",
+          "evento": "110116"
+        }
+      ]
+    },
+    {
+      "cStat": 219,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Data-hora do embarque não pode ser superior a 1 ano da data de emissão",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Ajuste a data de embarque para até 1 ano após a emissão.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F53"
+        }
+      ]
+    },
+    {
+      "cStat": 220,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Vedado cancelamento de BP-e com data/hora de embarque maior que data/hora atual",
+      "categoria": "eventos",
+      "acao_corretiva": "Após o embarque não cabe cancelamento; se o passageiro não embarcou, registre Não Embarque (110115). O Fisco pode liberar prazo via Manifestação do Fisco.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J07",
+          "evento": "110111"
+        }
+      ]
+    },
+    {
+      "cStat": 221,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Prazo para geração do evento de não embarque superior ao limite tolerado em relação a data- hora do embarque",
+      "categoria": "eventos",
+      "acao_corretiva": "Registre o Não Embarque em até 24h após o embarque.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J07",
+          "evento": "110115"
+        }
+      ]
+    },
+    {
+      "cStat": 222,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Protocolo de Autorização de Uso difere do cadastrado",
+      "categoria": "eventos",
+      "acao_corretiva": "Informe em nProt o protocolo de autorização do BP-e.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J08",
+          "evento": "110111"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J08",
+          "evento": "110115"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J09",
+          "evento": "110116"
+        }
+      ]
+    },
+    {
+      "cStat": 223,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CNPJ do transmissor do arquivo difere do CNPJ do transmissor da consulta",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Use o mesmo certificado/CNPJ de transmissão utilizado no envio original."
+    },
+    {
+      "cStat": 224,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e já está substituído na base de dados da SEFAZ.",
+      "categoria": "regra_negocio",
+      "complemento_xMotivo": "[nProt:999999999999999][dhSubst: AAAA-MM-DDTHH:MM:SS TZD]",
+      "acao_corretiva": "Documento já substituído; não reenvie.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F101"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J06",
+          "evento": "110111"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J06",
+          "evento": "110115"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J06",
+          "evento": "110116"
+        }
+      ]
+    },
+    {
+      "cStat": 226,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Código da UF do Emitente diverge da UF autorizadora",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Envie para o autorizador da UF do emitente (ou SVRS, se a UF usa SEFAZ Virtual) e confira cUF.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F02"
+        },
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "G",
+          "id": "G02"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I02"
+        }
+      ]
+    },
+    {
+      "cStat": 227,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Erro na composição do Campo ID",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Monte Id=\"BPe\"+chave de 44 dígitos gerada a partir de cUF, AAMM de dhEmi, CNPJ, mod=63, serie, nBP, tpEmis, cBP e cDV do próprio XML.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F09"
+        }
+      ]
+    },
+    {
+      "cStat": 228,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e com Data-Hora de Emissão muito atrasada",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Emita e transmita em tempo real; se houver falha de comunicação, use contingência off-line (tpEmis=2) quando permitido.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F52"
+        }
+      ]
+    },
+    {
+      "cStat": 229,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: IE do emitente não informada",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe a IE do emitente.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F29"
+        }
+      ]
+    },
+    {
+      "cStat": 230,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: IE do emitente não cadastrada",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Confirme a IE no cadastro da SEFAZ.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F32"
+        }
+      ]
+    },
+    {
+      "cStat": 231,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: IE do emitente não vinculada ao CNPJ",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Verifique o vínculo IE x CNPJ no cadastro estadual.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F33"
+        }
+      ]
+    },
+    {
+      "cStat": 233,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Código da UF do emitente difere da Sigla da UF do Emitente",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Compatibilize ide/cUF com enderEmit/UF (tabela IBGE).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F04"
+        }
+      ]
+    },
+    {
+      "cStat": 234,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Evento de não embarque deve ser posterior a data-hora do embarque",
+      "categoria": "eventos",
+      "acao_corretiva": "Registre o Não Embarque somente após o horário de embarque; antes disso, use Cancelamento.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J07b",
+          "evento": "110115"
+        }
+      ]
+    },
+    {
+      "cStat": 235,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Prazo para alteração de poltrona excedido",
+      "categoria": "eventos",
+      "acao_corretiva": "Prazo para alteração de poltrona excedido.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J08",
+          "evento": "110116"
+        }
+      ]
+    },
+    {
+      "cStat": 236,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Chave de Acesso inválida",
+      "categoria": "regra_negocio",
+      "complemento_xMotivo": "[Motivo: XXXXXXXXX]",
+      "acao_corretiva": "Valide a chave localmente (bpe_gerar_chave_acesso / validar) antes de consultar; o xMotivo indica o motivo.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "G",
+          "id": "G04"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I08"
+        }
+      ]
+    },
+    {
+      "cStat": 237,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Poltrona indicada na alteração deve ser diferente da declarada no BP-e",
+      "categoria": "eventos",
+      "acao_corretiva": "Informe uma poltrona diferente da atual.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J10",
+          "evento": "110116"
+        }
+      ]
+    },
+    {
+      "cStat": 239,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Versão informada para o BP-e não suportada",
+      "categoria": "estrutura_xml",
+      "acao_corretiva": "Informe no atributo versao a versão de leiaute vigente (ex.: 1.00) e use os schemas correspondentes.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "C",
+          "id": "C06"
+        }
+      ]
+    },
+    {
+      "cStat": 240,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Cancelamento - Irregularidade Fiscal do Emitente",
+      "categoria": "eventos",
+      "acao_corretiva": "Regularize a situação fiscal.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J04",
+          "evento": "110111"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J04",
+          "evento": "110115"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J04",
+          "evento": "110116"
+        }
+      ]
+    },
+    {
+      "cStat": 243,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: XML Mal Formado",
+      "categoria": "estrutura_xml",
+      "acao_corretiva": "Valide o XML com um parser antes do envio; verifique escape de caracteres especiais (&, <, >, \", ').",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "B",
+          "id": "B02"
+        }
+      ]
+    },
+    {
+      "cStat": 244,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Falha na descompactação da área de dados",
+      "categoria": "estrutura_xml",
+      "acao_corretiva": "Compacte o XML do BP-e com GZip e converta para Base64 antes de colocá-lo em bpeDadosMsg; não compacte os demais serviços.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "B",
+          "id": "B00"
+        }
+      ]
+    },
+    {
+      "cStat": 247,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Sigla da UF do Emitente diverge da UF autorizadora",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Confira emit/enderEmit/UF e o endpoint utilizado.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F03"
+        }
+      ]
+    },
+    {
+      "cStat": 249,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: UF da Chave de Acesso diverge da UF autorizadora",
+      "categoria": "eventos",
+      "acao_corretiva": "Envie ao autorizador da UF da chave.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J01",
+          "evento": "110111"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J01",
+          "evento": "110115"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J01",
+          "evento": "110116"
+        }
+      ]
+    },
+    {
+      "cStat": 252,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Ambiente informado diverge do Ambiente de recebimento",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Use tpAmb=1 apenas nas URLs de produção e tpAmb=2 nas de homologação.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F01"
+        },
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "G",
+          "id": "G01"
+        },
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "H",
+          "id": "H01"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I01"
+        }
+      ]
+    },
+    {
+      "cStat": 253,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Digito Verificador da chave de acesso composta inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Recalcule o DV pelo Módulo 11 (pesos 2..9 da direita para a esquerda; resto 0 ou 1 => DV 0).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F11"
+        }
+      ]
+    },
+    {
+      "cStat": 254,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Data-hora do embarque deve ser maior ou igual data de emissão",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Não emita BP-e com embarque no passado (use dhEmi <= dhEmb).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F54"
+        }
+      ]
+    },
+    {
+      "cStat": 280,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Transmissor inválido",
+      "categoria": "certificado_transmissor",
+      "acao_corretiva": "Use um certificado ICP-Brasil A1/A3 X.509 v3 de usuário final, com Extended Key Usage 'Autenticação Cliente', configurado na conexão TLS (mTLS).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "A",
+          "id": "A01"
+        }
+      ]
+    },
+    {
+      "cStat": 281,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Transmissor Data Validade",
+      "categoria": "certificado_transmissor",
+      "acao_corretiva": "Renove o certificado digital de transmissão; confira o relógio do servidor.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "A",
+          "id": "A02"
+        }
+      ]
+    },
+    {
+      "cStat": 282,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Transmissor sem CNPJ",
+      "categoria": "certificado_transmissor",
+      "acao_corretiva": "Utilize certificado e-CNPJ (pessoa jurídica) que contenha o OID 2.16.76.1.3.3.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "A",
+          "id": "A07"
+        }
+      ]
+    },
+    {
+      "cStat": 283,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Transmissor - erro Cadeia de Certificação",
+      "categoria": "certificado_transmissor",
+      "acao_corretiva": "Use certificado emitido por AC credenciada ICP-Brasil e envie a cadeia completa na conexão TLS.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "A",
+          "id": "A03"
+        }
+      ]
+    },
+    {
+      "cStat": 284,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Transmissor revogado",
+      "categoria": "certificado_transmissor",
+      "acao_corretiva": "Emita/adquira um novo certificado digital.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "A",
+          "id": "A05"
+        }
+      ]
+    },
+    {
+      "cStat": 285,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Transmissor difere ICP-Brasil",
+      "categoria": "certificado_transmissor",
+      "acao_corretiva": "Utilize apenas certificados da hierarquia ICP-Brasil.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "A",
+          "id": "A06"
+        }
+      ]
+    },
+    {
+      "cStat": 286,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Transmissor erro no acesso a LCR",
+      "categoria": "certificado_transmissor",
+      "acao_corretiva": "Verifique se o certificado tem ponto de distribuição de LCR; tente novamente mais tarde se a LCR da AC estiver indisponível.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "A",
+          "id": "A04"
+        }
+      ]
+    },
+    {
+      "cStat": 287,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Transmissor sem CNPJ ou CPF",
+      "categoria": "certificado_transmissor",
+      "acao_corretiva": "Use certificado de transmissão que contenha CNPJ ou CPF."
+    },
+    {
+      "cStat": 290,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Assinatura inválido",
+      "categoria": "certificado_assinatura",
+      "acao_corretiva": "Assine com certificado ICP-Brasil A1/A3 de usuário final, com uso de chave para assinatura digital.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "D",
+          "id": "D01"
+        }
+      ]
+    },
+    {
+      "cStat": 291,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Assinatura Data Validade",
+      "categoria": "certificado_assinatura",
+      "acao_corretiva": "Renove o certificado de assinatura.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "D",
+          "id": "D02"
+        }
+      ]
+    },
+    {
+      "cStat": 292,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Assinatura sem CNPJ",
+      "categoria": "certificado_assinatura",
+      "acao_corretiva": "Use e-CNPJ do estabelecimento emissor ou da matriz.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "D",
+          "id": "D03"
+        }
+      ]
+    },
+    {
+      "cStat": 293,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Assinatura - erro Cadeia de Certificação",
+      "categoria": "certificado_assinatura",
+      "acao_corretiva": "Use certificado emitido por AC credenciada ICP-Brasil.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "D",
+          "id": "D04"
+        }
+      ]
+    },
+    {
+      "cStat": 294,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Assinatura revogado",
+      "categoria": "certificado_assinatura",
+      "acao_corretiva": "Adquira novo certificado digital.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "D",
+          "id": "D06"
+        }
+      ]
+    },
+    {
+      "cStat": 295,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Assinatura difere ICP-Brasil",
+      "categoria": "certificado_assinatura",
+      "acao_corretiva": "Use certificado da hierarquia ICP-Brasil.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "D",
+          "id": "D07"
+        }
+      ]
+    },
+    {
+      "cStat": 296,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Certificado Assinatura erro no acesso a LCR",
+      "categoria": "certificado_assinatura",
+      "acao_corretiva": "Verifique o ponto de distribuição da LCR; tente novamente mais tarde.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "D",
+          "id": "D05"
+        }
+      ]
+    },
+    {
+      "cStat": 297,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Assinatura difere do calculado",
+      "categoria": "certificado_assinatura",
+      "acao_corretiva": "Não altere o XML após assinar (nem formatação); canonicalize com C14N e assine o XML exatamente como será enviado.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "E",
+          "id": "E02"
+        }
+      ]
+    },
+    {
+      "cStat": 298,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Assinatura difere do padrão do Projeto",
+      "categoria": "certificado_assinatura",
+      "acao_corretiva": "Assine <infBPe>/<infEvento> por Id com Reference URI=\"#Id\", Transforms enveloped-signature + C14N (REC-xml-c14n-20010315), RSA-SHA1 e SHA-1.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "E",
+          "id": "E01"
+        }
+      ]
+    },
+    {
+      "cStat": 401,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Valor de desconto deve ser informado quando indicado o tipo de benefício",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe vDesconto > 0 ou remova tpDesconto.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F61"
+        }
+      ]
+    },
+    {
+      "cStat": 402,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: XML da área de dados com codificação diferente de UTF-8",
+      "categoria": "estrutura_xml",
+      "acao_corretiva": "Gere o XML em UTF-8 com a declaração <?xml version=\"1.0\" encoding=\"UTF-8\"?>.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "C",
+          "id": "C05"
+        }
+      ]
+    },
+    {
+      "cStat": 403,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Valor pago difere do Valor Total menos o desconto concedido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Calcule vPgto = vBP - vDesconto.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F68"
+        }
+      ]
+    },
+    {
+      "cStat": 404,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Uso de prefixo de namespace não permitido",
+      "categoria": "estrutura_xml",
+      "acao_corretiva": "Não use prefixos (ex.: <bpe:BPe>); use namespace padrão sem prefixo.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "C",
+          "id": "C04"
+        }
+      ]
+    },
+    {
+      "cStat": 405,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Município de início da viagem inexistente",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija cMunIni com código IBGE válido.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F14"
+        }
+      ]
+    },
+    {
+      "cStat": 406,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Município de fim da viagem inexistente",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija cMunFim com código IBGE válido.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F16"
+        }
+      ]
+    },
+    {
+      "cStat": 407,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Código de Município diverge da UF do Emitente do BP-e",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija enderEmit/cMun para município da UF do emitente.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F35"
+        }
+      ]
+    },
+    {
+      "cStat": 408,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Município do Emitente inexistente",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija enderEmit/cMun.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F36"
+        }
+      ]
+    },
+    {
+      "cStat": 409,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Código de Município diverge da UF de início da viagem do BP-e",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Use código IBGE de município compatível com a UF de início.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F12"
+        }
+      ]
+    },
+    {
+      "cStat": 410,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Código de Município diverge da UF de fim da viagem do BP-e",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Use código IBGE de município compatível com UFFim.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F15"
+        }
+      ]
+    },
+    {
+      "cStat": 411,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Código de Município inválido para viagem ao exterior",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Para destino no exterior, informe cMunFim=9999999.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F17"
+        }
+      ]
+    },
+    {
+      "cStat": 412,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Documento autorizado ao XML duplicado no BP-e",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Remova documentos repetidos de autXML.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F104"
+        }
+      ]
+    },
+    {
+      "cStat": 413,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Consulta a uma Chave de Acesso muito antiga",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Chaves com mais de 6 meses não são consultáveis por este serviço; use a consulta pública.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "G",
+          "id": "G03"
+        }
+      ]
+    },
+    {
+      "cStat": 414,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: O Termo de Autorização de Serviço Regular (TAR) deve ser informado para modal rodoviário",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe a tag TAR do emitente no modal rodoviário.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F37"
+        }
+      ]
+    },
+    {
+      "cStat": 415,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Data e Justificativa de entrada em contingência não devem ser informadas para tipo de emissão igual a Normal.",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Remova dhCont e xJust em emissão normal.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F05"
+        }
+      ]
+    },
+    {
+      "cStat": 416,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Data e Justificativa de entrada em contingência devem ser informadas",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe dhCont (data/hora de entrada em contingência) e xJust (justificativa) quando tpEmis=2.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F06"
+        }
+      ]
+    },
+    {
+      "cStat": 417,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Data de entrada em contingência posterior ou igual a data de emissão.",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Ajuste dhCont para um instante anterior ou igual a dhEmi.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F07"
+        }
+      ]
+    },
+    {
+      "cStat": 418,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: UF do Emitente não permite emissão Off-line",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "A UF não permite off-line: aguarde o restabelecimento do serviço e emita em modo normal.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F08"
+        }
+      ]
+    },
+    {
+      "cStat": 419,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Viagem sem conexão com trecho inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Para viagem simples use um único infViagem com tpTrecho=1.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F20"
+        }
+      ]
+    },
+    {
+      "cStat": 420,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Viagem com conexão com um dos trechos inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Ajuste tpTrecho: primeiro trecho=2, demais=3.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F22"
+        }
+      ]
+    },
+    {
+      "cStat": 421,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Ano do BP-e informado na chave de acesso inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Use o AAMM da data de emissão real (ano >= 2017).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F10"
+        }
+      ]
+    },
+    {
+      "cStat": 422,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CNPJ do comprador inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija o CNPJ do comprador.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F38"
+        }
+      ]
+    },
+    {
+      "cStat": 423,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CPF do comprador inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija o CPF do comprador.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F39"
+        }
+      ]
+    },
+    {
+      "cStat": 424,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Código de Município diverge da UF de localização comprador",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Compatibilize cMun e UF do comprador.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F40"
+        }
+      ]
+    },
+    {
+      "cStat": 425,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Município do comprador inexistente",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija o código de município do comprador.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F41"
+        }
+      ]
+    },
+    {
+      "cStat": 426,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Código de Município inválido para comprador residente no exterior",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe cMun=9999999 para comprador no exterior.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F42"
+        }
+      ]
+    },
+    {
+      "cStat": 427,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: IE do comprador inválida",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija a IE do comprador ou omita-a.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F43"
+        }
+      ]
+    },
+    {
+      "cStat": 428,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: IE do comprador não cadastrada",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Confirme a IE do comprador no cadastro (CCC).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F44"
+        }
+      ]
+    },
+    {
+      "cStat": 429,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: IE do comprador não vinculada ao CNPJ",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Confira o vínculo IE x CNPJ do comprador.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F45"
+        }
+      ]
+    },
+    {
+      "cStat": 430,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: IE do Comprador não informada",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe a IE ativa do comprador.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F46"
+        }
+      ]
+    },
+    {
+      "cStat": 431,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CNPJ da Agência inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija o CNPJ da agência.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F47"
+        }
+      ]
+    },
+    {
+      "cStat": 432,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Código de Município diverge da UF de localização da Agência",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Compatibilize cMun e UF da agência.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F48"
+        }
+      ]
+    },
+    {
+      "cStat": 433,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Município da Agência inexistente",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija cMun da agência.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F49"
+        }
+      ]
+    },
+    {
+      "cStat": 434,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Valor total do bilhete superior ao limite permitido (R$ 999.999,99)",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Verifique o valor (possível erro de casas decimais).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F57"
+        }
+      ]
+    },
+    {
+      "cStat": 435,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Valor do imposto não corresponde à base de cálculo X alíquota",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Recalcule vICMS = vBC x pICMS / 100 com arredondamento em 2 casas.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F58"
+        }
+      ]
+    },
+    {
+      "cStat": 436,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Valor da soma dos componentes não corresponde ao valor total do bilhete",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Garanta que a soma de vComp feche com vBP.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F59"
+        }
+      ]
+    },
+    {
+      "cStat": 437,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Descrição do Tipo do desconto deve ser informada",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe a descrição do desconto (xDesconto).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F60"
+        }
+      ]
+    },
+    {
+      "cStat": 438,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e com somatório dos pagamentos diferente do total pago",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Ajuste os valores de pagamento e troco.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F67"
+        }
+      ]
+    },
+    {
+      "cStat": 439,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Grupo BP-e de Substituição deve ser informado para o BP-e de Substituição",
+      "categoria": "substituicao",
+      "acao_corretiva": "Informe infBPeSub com a chave do BP-e substituído e o tipo de substituição.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F73"
+        }
+      ]
+    },
+    {
+      "cStat": 440,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Grupo BP-e de Substituição não deve informado para o BP-e Normal",
+      "categoria": "substituicao",
+      "acao_corretiva": "Remova infBPeSub em BP-e normal.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F74"
+        }
+      ]
+    },
+    {
+      "cStat": 449,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e a ser substituído inexistente",
+      "categoria": "substituicao",
+      "acao_corretiva": "Confirme que o BP-e original foi autorizado (consulte a situação).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F76"
+        }
+      ]
+    },
+    {
+      "cStat": 450,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e substituído com diferença de Chave de Acesso",
+      "categoria": "substituicao",
+      "complemento_xMotivo": "[chBPe: 99999999999999999999999999999999999999999999] [nProt:999999999999999][dhAut: AAAA-MM-DDTHH:MM:SS TZD]",
+      "acao_corretiva": "Use a chave exatamente igual à autorizada (retornada no xMotivo).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F77"
+        }
+      ]
+    },
+    {
+      "cStat": 451,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e a ser substituído deve estar na situação Autorizado o Uso",
+      "categoria": "substituicao",
+      "acao_corretiva": "Não é possível substituir BP-e cancelado; emita um novo BP-e normal.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F78"
+        }
+      ]
+    },
+    {
+      "cStat": 452,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e a ser substituído não pode ter sido substituído anteriormente",
+      "categoria": "substituicao",
+      "acao_corretiva": "Substitua o BP-e substituto mais recente.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F79"
+        }
+      ]
+    },
+    {
+      "cStat": 453,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e a ser substituído com data/hora de embarque anterior a data-hora atual sem evento de Não Embarque associado",
+      "categoria": "substituicao",
+      "acao_corretiva": "Registre o evento de Não Embarque (110115) no BP-e original antes de substituí-lo.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F80"
+        }
+      ]
+    },
+    {
+      "cStat": 454,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CNPJ do emitente do BP-e substituto deve ser igual ao informado no BP-e substituído",
+      "categoria": "substituicao",
+      "acao_corretiva": "Emita a substituição pelo mesmo CNPJ.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F81"
+        }
+      ]
+    },
+    {
+      "cStat": 455,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: IE do emitente do BP-e substituto deve ser igual à informada no BP-e substituído",
+      "categoria": "substituicao",
+      "acao_corretiva": "Emita a substituição pela mesma IE.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F82"
+        }
+      ]
+    },
+    {
+      "cStat": 456,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CNPJ/CPF do comprador do BP-e substituto deve ser igual ao informado no BP-e substituído",
+      "categoria": "substituicao",
+      "acao_corretiva": "Mantenha o comprador do BP-e original.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F83"
+        }
+      ]
+    },
+    {
+      "cStat": 457,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: IE do comprador do BP-e substituto deve ser igual à informada no BP-e substituído",
+      "categoria": "substituicao",
+      "acao_corretiva": "Mantenha a IE do comprador original.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F84"
+        }
+      ]
+    },
+    {
+      "cStat": 458,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: UF e Município de início e fim da viagem do BP-e substituto devem ser iguais aos informados no BP-e substituído",
+      "categoria": "substituicao",
+      "acao_corretiva": "Mantenha origem e destino do BP-e original.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F85"
+        }
+      ]
+    },
+    {
+      "cStat": 459,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Não é permitido transferir titularidade de BP-e com desconto/benefício concedido no bilhete",
+      "categoria": "substituicao",
+      "acao_corretiva": "Bilhete com benefício não pode ser transferido.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F86"
+        }
+      ]
+    },
+    {
+      "cStat": 460,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Passageiro do BP-e substituto deve ser igual ao informado no BP-e substituído para operação de remarcação",
+      "categoria": "substituicao",
+      "acao_corretiva": "Mantenha o passageiro na remarcação.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F87"
+        }
+      ]
+    },
+    {
+      "cStat": 461,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Passageiro do BP-e substituto deve ser diferente ao informado no BP-e substituído para operação de transferência",
+      "categoria": "substituicao",
+      "acao_corretiva": "Na transferência o passageiro deve mudar.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F91"
+        }
+      ]
+    },
+    {
+      "cStat": 462,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Data/hora do embarque do BP-e substituto deve ser diferente do informado no BP-e substituído para operação de remarcação",
+      "categoria": "substituicao",
+      "acao_corretiva": "Na remarcação a data/hora de embarque deve mudar.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F94"
+        }
+      ]
+    },
+    {
+      "cStat": 463,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Data/hora do embarque do BP-e substituto deve ser igual ao informado no BP-e substituído para operação de transferência",
+      "categoria": "substituicao",
+      "acao_corretiva": "Na transferência mantenha a data/hora de embarque.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F95"
+        }
+      ]
+    },
+    {
+      "cStat": 464,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Data/hora do embarque e Passageiro do BP-e substituto devem ser diferentes aos informados no BP-e substituído em operação de transferência e remarcação",
+      "categoria": "substituicao",
+      "acao_corretiva": "Altere data de embarque e passageiro.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F96"
+        }
+      ]
+    },
+    {
+      "cStat": 465,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: A autorização do BP-e de substituição deve ocorrer em até 1 ano da data de autorização do BP-e Normal originalmente autorizado",
+      "categoria": "substituicao",
+      "acao_corretiva": "Prazo de substituição expirado.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F97"
+        }
+      ]
+    },
+    {
+      "cStat": 466,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CNPJ autorizado para download inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija o CNPJ em autXML.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F102"
+        }
+      ]
+    },
+    {
+      "cStat": 467,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CPF autorizado para download inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija o CPF em autXML.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F103"
+        }
+      ]
+    },
+    {
+      "cStat": 475,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Não informados os dados do cartão de crédito/débito nas formas de pagamento",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe o grupo card para pagamentos com cartão.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F69"
+        }
+      ]
+    },
+    {
+      "cStat": 477,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Pagamento com cartão de crédito em sistema de automação não integrado",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Use pagamento integrado (tpIntegra=1) ou confirme a regra da UF.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F70"
+        }
+      ]
+    },
+    {
+      "cStat": 478,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Não informados os dados da operação de pagamento por cartão de crédito / débito",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe CNPJ da credenciadora e código de autorização.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F72"
+        }
+      ]
+    },
+    {
+      "cStat": 479,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Endereço do site da UF da Consulta via QR Code diverge do previsto",
+      "categoria": "qrcode",
+      "acao_corretiva": "Use a URL de QR Code oficial da UF/ambiente em infBPeSupl/qrCodBPe.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F105"
+        }
+      ]
+    },
+    {
+      "cStat": 481,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Parâmetro chave de acesso do QR Code divergente do BP-e",
+      "categoria": "qrcode",
+      "acao_corretiva": "Monte o QR Code com a mesma chave do Id.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F106"
+        }
+      ]
+    },
+    {
+      "cStat": 482,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Parâmetro sign não informado no QR Code para emissão em contingência",
+      "categoria": "qrcode",
+      "acao_corretiva": "Inclua &sign=<RSA-SHA1 Base64 da chave> no QR Code.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F107"
+        }
+      ]
+    },
+    {
+      "cStat": 484,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: A data-hora da conexão deve ser informada para viagem conexão",
+      "categoria": "qrcode",
+      "acao_corretiva": "Informe dhConexao nos trechos de conexão.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F23"
+        }
+      ]
+    },
+    {
+      "cStat": 485,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: A data-hora da conexão não deve ser informada para viagem normal ou trecho inicial",
+      "categoria": "qrcode",
+      "acao_corretiva": "Remova dhConexao de trechos normais/iniciais.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F24"
+        }
+      ]
+    },
+    {
+      "cStat": 486,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: A data-hora da conexão deve ser maior que a data-hora do embarque",
+      "categoria": "qrcode",
+      "acao_corretiva": "Ajuste dhConexao para depois de dhViagem/embarque.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F25"
+        }
+      ]
+    },
+    {
+      "cStat": 487,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: O BP-e de substituto de transferência deve informar os dados do passageiro",
+      "categoria": "substituicao",
+      "acao_corretiva": "Informe os dados do passageiro no BP-e substituto de transferência."
+    },
+    {
+      "cStat": 488,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Parâmetro sign não deve ser informado no QR Code para emissão Normal",
+      "categoria": "qrcode",
+      "acao_corretiva": "Remova sign do QR Code em tpEmis=1.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F108"
+        }
+      ]
+    },
+    {
+      "cStat": 491,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: A identificação do passageiro é obrigatória na substituição por transferência",
+      "categoria": "substituicao",
+      "acao_corretiva": "Informe o grupo infPassageiro.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F90"
+        }
+      ]
+    },
+    {
+      "cStat": 492,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CPF do Passageiro do BP-e substituto deve ser igual ao informado no BP-e substituído para operação de remarcação",
+      "categoria": "substituicao",
+      "acao_corretiva": "Mantenha o CPF do passageiro.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F88"
+        }
+      ]
+    },
+    {
+      "cStat": 493,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Documento do Passageiro do BP-e substituto deve ser igual ao informado no BP-e substituído para operação de remarcação",
+      "categoria": "substituicao",
+      "acao_corretiva": "Mantenha o documento do passageiro.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F89"
+        }
+      ]
+    },
+    {
+      "cStat": 494,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CPF do Passageiro do BP-e substituto deve ser diferente ao informado no BP-e substituído para operação de transferência",
+      "categoria": "substituicao",
+      "acao_corretiva": "Informe o CPF do novo passageiro.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F92"
+        }
+      ]
+    },
+    {
+      "cStat": 495,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Documento do Passageiro do BP-e substituto deve ser diferente ao informado no BP-e substituído para operação de transferência",
+      "categoria": "substituicao",
+      "acao_corretiva": "Informe o documento do novo passageiro.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F93"
+        }
+      ]
+    },
+    {
+      "cStat": 496,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Assinatura do QR-Code difere do calculado",
+      "categoria": "qrcode",
+      "acao_corretiva": "Assine a chave de 44 dígitos (string) com a chave privada do mesmo certificado que assina o BP-e, RSA-SHA1, em Base64.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F109"
+        }
+      ]
+    },
+    {
+      "cStat": 497,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CPF do passageiro inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija o CPF do passageiro.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F19"
+        }
+      ]
+    },
+    {
+      "cStat": 498,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Tipo de serviço inválido para o modal de transporte",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Use tipo de serviço compatível com o modal.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F27"
+        }
+      ]
+    },
+    {
+      "cStat": 499,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Valor do imposto superior ao valor do BP-e",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Revise base de cálculo e alíquota.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F66"
+        }
+      ]
+    },
+    {
+      "cStat": 500,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: O tipo desconto deve ser informado",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe tpDesconto.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F62"
+        }
+      ]
+    },
+    {
+      "cStat": 501,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Valor do BP-e sem desconto deve ser maior que zero",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "BP-e sem desconto deve ter valor > 0; para gratuidade informe tpDesconto.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F65"
+        }
+      ]
+    },
+    {
+      "cStat": 502,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CNPJ da credenciadora do cartão inválido",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija o CNPJ da credenciadora.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F71"
+        }
+      ]
+    },
+    {
+      "cStat": 503,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Código de Município inválido para Agência do exterior",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe cMun=9999999 para agência no exterior.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F50"
+        }
+      ]
+    },
+    {
+      "cStat": 504,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Cancelamento não permitido, BP-e possui evento de não embarque",
+      "categoria": "eventos",
+      "acao_corretiva": "BP-e com Não Embarque não pode ser cancelado.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J09",
+          "evento": "110111"
+        }
+      ]
+    },
+    {
+      "cStat": 505,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: UF de início da viagem deve ser igual a UF do emitente do BP-e",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "A viagem deve iniciar na UF do estabelecimento emitente; emita pelo estabelecimento da UF de origem.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F13"
+        }
+      ]
+    },
+    {
+      "cStat": 506,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e Normal com data de validade diferente de 1 ano da data de emissão",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Calcule dhValidade = dhEmi + 1 ano.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F55"
+        }
+      ]
+    },
+    {
+      "cStat": 507,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: BP-e Substituição com data de validade diferente do BP-e Normal",
+      "categoria": "substituicao",
+      "acao_corretiva": "Copie a data de validade do BP-e original.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F56"
+        }
+      ]
+    },
+    {
+      "cStat": 508,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Chave de acesso do BP-e substituído inválida",
+      "categoria": "substituicao",
+      "complemento_xMotivo": "[Motivo: XXXXXXXXXXX]",
+      "acao_corretiva": "Corrija a chave do BP-e substituído (44 dígitos, DV válido, modelo 63).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F75"
+        }
+      ]
+    },
+    {
+      "cStat": 510,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CNPJ do responsável técnico inválido (zerado ou dígito inválido)",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Corrija o CNPJ do responsável técnico.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F111"
+        }
+      ]
+    },
+    {
+      "cStat": 511,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Código do desconto deve ser informado para tipo 99 - Outros",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe o código do desconto (cDesconto).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F63"
+        }
+      ]
+    },
+    {
+      "cStat": 539,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Duplicidade de BP-e, com diferença na Chave de Acesso",
+      "categoria": "regra_negocio",
+      "complemento_xMotivo": "[chBPe: 99999999999999999999999999999999999999999999] [nProt:999999999999999] [dhAut: AAAA-MM-DDTHH:MM:SS TZD]",
+      "acao_corretiva": "O número/série já foi autorizado com outra chave: consulte a chave retornada; não reenvie com novo cBP. Se for outro bilhete, use novo número.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F98"
+        }
+      ]
+    },
+    {
+      "cStat": 598,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Usar somente o namespace padrão do BP-e",
+      "categoria": "estrutura_xml",
+      "acao_corretiva": "Declare um único namespace no elemento raiz (xmlns=\"http://www.portalfiscal.inf.br/bpe\"); apenas <Signature> declara o namespace xmldsig.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "C",
+          "id": "C02"
+        }
+      ]
+    },
+    {
+      "cStat": 599,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Não é permitida a presença de caracteres de edição no início/fim da mensagem ou entre as tags da mensagem",
+      "categoria": "estrutura_xml",
+      "acao_corretiva": "Remova line-feed, carriage return, tab e espaços entre as tags; gere o XML minificado.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/certificado_xml.json",
+          "grupo": "C",
+          "id": "C03"
+        }
+      ]
+    },
+    {
+      "cStat": 600,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Chave de Acesso difere da existente em BD",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Use a chave retornada no xMotivo (quando o consulente é o emissor).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "G",
+          "id": "G07"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I20"
+        }
+      ]
+    },
+    {
+      "cStat": 627,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: CNPJ do autor do evento inválido",
+      "categoria": "eventos",
+      "acao_corretiva": "Corrija o CNPJ do autor.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I04"
+        }
+      ]
+    },
+    {
+      "cStat": 628,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Erro Atributo ID do evento não corresponde à concatenação dos campos (“ID” + tpEvento + chBPe + nSeqEvento)",
+      "categoria": "eventos",
+      "acao_corretiva": "Monte Id = \"ID\" + tpEvento(6) + chBPe(44) + nSeqEvento com 2 dígitos (total 54 caracteres).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I05"
+        }
+      ]
+    },
+    {
+      "cStat": 629,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: O tpEvento informado inválido",
+      "categoria": "eventos",
+      "acao_corretiva": "Use 110111, 110115 ou 110116 (eventos do emitente).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I06"
+        }
+      ]
+    },
+    {
+      "cStat": 630,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Falha no Schema XML específico para o evento",
+      "categoria": "estrutura_xml",
+      "acao_corretiva": "Valide detEvento contra o XSD do evento (evCancBPe, evNaoEmbBPe, evAlteracaoPoltrona).",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I07"
+        }
+      ]
+    },
+    {
+      "cStat": 631,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Duplicidade de evento",
+      "categoria": "eventos",
+      "complemento_xMotivo": "[nProt:999999999999999][dhRegEvento: AAAA-MM-DDTHH:MM:SS TZD]",
+      "acao_corretiva": "O evento já foi registrado: consulte a situação do BP-e para obter o protocolo; para poltrona incremente nSeqEvento.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I16"
+        }
+      ]
+    },
+    {
+      "cStat": 632,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: O autor do evento diverge do emissor do BP-e",
+      "categoria": "eventos",
+      "acao_corretiva": "O autor deve ser o emitente do BP-e.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I17"
+        }
+      ]
+    },
+    {
+      "cStat": 633,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: O autor do evento não é um órgão autorizado a gerar o evento",
+      "categoria": "eventos",
+      "acao_corretiva": "Somente órgãos autorizados podem gerar este evento.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I18"
+        }
+      ]
+    },
+    {
+      "cStat": 634,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: A data do evento não pode ser menor que a data de emissão do BP-e",
+      "categoria": "eventos",
+      "acao_corretiva": "Corrija dhEvento / relógio do servidor.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I21"
+        }
+      ]
+    },
+    {
+      "cStat": 635,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: A data do evento não pode ser maior que a data do processamento",
+      "categoria": "eventos",
+      "acao_corretiva": "Sincronize o relógio (NTP) e use o fuso correto.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I23"
+        }
+      ]
+    },
+    {
+      "cStat": 636,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: O número sequencial do evento é maior que o permitido",
+      "categoria": "eventos",
+      "acao_corretiva": "Use nSeqEvento=1.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J02",
+          "evento": "110111"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J02",
+          "evento": "110115"
+        },
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J02",
+          "evento": "110116"
+        }
+      ]
+    },
+    {
+      "cStat": 637,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: A data do evento não pode ser menor que a data de autorização do BP-e",
+      "categoria": "eventos",
+      "acao_corretiva": "Corrija dhEvento / relógio do servidor.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "I",
+          "id": "I22"
+        }
+      ]
+    },
+    {
+      "cStat": 638,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Conexão não permitida para o modal",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Conexões (múltiplos trechos) só são permitidas no modal ferroviário; emita um BP-e por trecho.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F21"
+        }
+      ]
+    },
+    {
+      "cStat": 639,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: As informações da travessia devem ser preenchidas para modal Aquaviário e tipo de serviço Travessia",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe o grupo infTravessia.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F26"
+        }
+      ]
+    },
+    {
+      "cStat": 678,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Uso Indevido",
+      "categoria": "uso_indevido",
+      "acao_corretiva": "Bloqueio por uso indevido: PARE os envios ao serviço por pelo menos 1 hora, corrija a causa (loop, reenvio de documento rejeitado, consultas repetidas) e implemente backoff.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/uso_indevido.json",
+          "grupo": "CI",
+          "id": "CI01"
+        },
+        {
+          "arquivo": "regras_validacao/uso_indevido.json",
+          "grupo": "CI",
+          "id": "CI03"
+        },
+        {
+          "arquivo": "regras_validacao/uso_indevido.json",
+          "grupo": "CI",
+          "id": "CI04"
+        },
+        {
+          "arquivo": "regras_validacao/uso_indevido.json",
+          "grupo": "CI",
+          "id": "CI05"
+        }
+      ]
+    },
+    {
+      "cStat": 679,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Obrigatória as informações do responsável técnico",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe o grupo infRespTec.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F110"
+        }
+      ]
+    },
+    {
+      "cStat": 680,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Obrigatória a informação do identificador do CSRT e do Hash do CSRT",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Informe idCSRT e hashCSRT quando exigidos pela UF.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F112"
+        }
+      ]
+    },
+    {
+      "cStat": 681,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Alteração de Poltrona não permitida, BP-e possui evento de não embarque",
+      "categoria": "eventos",
+      "acao_corretiva": "Não é possível alterar poltrona após Não Embarque.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/eventos.json",
+          "grupo": "J",
+          "id": "J07",
+          "evento": "110116"
+        }
+      ]
+    },
+    {
+      "cStat": 682,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Usuário não possui autorização para desconto no Bilhete de Passagem",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Confirme o benefício do passageiro no órgão regulador antes de emitir.",
+      "regras": [
+        {
+          "arquivo": "regras_validacao/negocio_bpe.json",
+          "grupo": "F",
+          "id": "F64"
+        }
+      ]
+    },
+    {
+      "cStat": 997,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: XML do BP-e referenciado indisponível no momento da validação (Existem situações em que o ambiente de autorização trabalha com um banco de dados separado para o arquivo XML)",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Tente novamente mais tarde; o XML do BP-e referenciado está temporariamente indisponível no autorizador."
+    },
+    {
+      "cStat": 999,
+      "tipo": "rejeicao",
+      "mensagem": "Rejeição: Erro não catalogado (informar a msg de erro capturado no tratamento da exceção)",
+      "categoria": "regra_negocio",
+      "acao_corretiva": "Erro não catalogado: leia o xMotivo, verifique o XML e contate a SEFAZ se persistir. Não reenvie em loop (risco de 678)."
+    }
+  ]
+}

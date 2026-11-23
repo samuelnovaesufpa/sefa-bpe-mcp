@@ -1,0 +1,76 @@
+{
+  "fonte": "MOC BP-e v1.00b (abril/2019) — Manual de Orientações do Contribuinte, Padrões Técnicos de Comunicação",
+  "secao_moc": "12",
+  "tpEmis": {
+    "1": "Normal",
+    "2": "Contingência Off-line"
+  },
+  "decisao": "Exclusiva do contribuinte, sem autorização prévia do Fisco, mas a UF pode não aceitar a modalidade (cStat 418). Deve ser exceção, usada só quando houver impossibilidade técnica de autorização em tempo real.",
+  "prazo_transmissao": "Até o final do primeiro dia útil subsequente à emissão em contingência.",
+  "campos_obrigatorios": {
+    "dhCont": "Data e hora de entrada em contingência (formato AAAA-MM-DDTHH:MM:SS TZD). Deve ser <= dhEmi (cStat 417). Não é impresso no DABPE.",
+    "xJust": "Justificativa da entrada em contingência. Não é impressa no DABPE."
+  },
+  "regras_validacao": [
+    {
+      "id": "F05",
+      "cStat": 415,
+      "regra": "tpEmis=1: dhCont e xJust NÃO devem ser informados."
+    },
+    {
+      "id": "F06",
+      "cStat": 416,
+      "regra": "tpEmis=2: dhCont e xJust devem ser informados."
+    },
+    {
+      "id": "F07",
+      "cStat": 417,
+      "regra": "dhCont deve ser menor ou igual a dhEmi."
+    },
+    {
+      "id": "F08",
+      "cStat": 418,
+      "regra": "UF do emitente não permite emissão off-line."
+    },
+    {
+      "id": "F52",
+      "cStat": 150,
+      "regra": "A critério da UF, BP-e off-line transmitido após 24h é autorizado com cStat 150 (autorização fora de prazo)."
+    },
+    {
+      "id": "F107",
+      "cStat": 482,
+      "regra": "QR Code deve conter o parâmetro sign."
+    },
+    {
+      "id": "F109",
+      "cStat": 496,
+      "regra": "sign deve corresponder à assinatura RSA-SHA1 (Base64) da chave de acesso."
+    },
+    {
+      "id": "J07 (110111)",
+      "cStat": 220,
+      "regra": "Cancelamento de BP-e emitido em contingência tolera até 24h após o embarque."
+    }
+  ],
+  "acoes_entrada_contingencia": [
+    "Alterar o XML do BP-e com tpEmis = 2 (Contingência Off-line)",
+    "Preencher dhCont e xJust",
+    "Gerar nova chave de acesso com tpEmis = 2, mantendo o mesmo cBP",
+    "Gerar o QR Code do DABPE com o parâmetro sign (RSA-SHA1 Base64 da chave de acesso, com o certificado que assina o BP-e)",
+    "Emitir o DABPE com a mensagem 'EMITIDO EM CONTINGÊNCIA'",
+    "Transmitir o arquivo assim que superada a dificuldade técnica"
+  ],
+  "recomendacoes": [
+    "Não é necessária série específica nem papel especial.",
+    "Recomenda-se avançar um número na sequência de numeração ao entrar em contingência, evitando rejeição posterior por duplicidade.",
+    "Na transmissão posterior, manter a mesma chave de acesso, inclusive o mesmo código numérico (cBP).",
+    "Consulta pública de BP-e off-line ainda não transmitido retorna código 206 ('Volte a consultar após 24h')."
+  ],
+  "riscos": [
+    "BP-e transmitido depois pode ser rejeitado quando a viagem já ocorreu.",
+    "O BP-e só aparece na consulta pública após a autorização.",
+    "Risco de perda da informação até que o BP-e conste na base do Fisco.",
+    "O Fisco pode restringir o uso de contingência se usada em demasia."
+  ]
+}

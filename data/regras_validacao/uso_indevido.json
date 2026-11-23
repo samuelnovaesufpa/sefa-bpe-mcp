@@ -1,0 +1,97 @@
+{
+  "fonte": "MOC BP-e v1.00b (abril/2019) — Manual de Orientações do Contribuinte, Padrões Técnicos de Comunicação",
+  "secao_moc": "9",
+  "cStat": 678,
+  "mensagem": "Rejeição: Uso Indevido",
+  "descricao": "Controles do autorizador contra consumo indevido (loops e reenvios 'efeito pica-pau'). Os limites marcados com * são critérios preferenciais, parametrizáveis por ambiente autorizador e podem mudar a qualquer tempo.",
+  "identificacao_contribuinte": "CNPJ do certificado de transmissão + IP, ou CNPJ do emitente/autor.",
+  "intervalo_minimo_consulta_status_segundos": 180,
+  "regras": [
+    {
+      "id": "CI01",
+      "servico": "bpeRecepcao",
+      "critica": "Facultativa",
+      "cStat": 678,
+      "condicao": "BP-e enviado com mais de 30* rejeições iguais.",
+      "limite": 30,
+      "janela": "mesmo BP-e / mesma rejeição",
+      "bloqueio_horas": 1,
+      "bloqueio_permanente_apos_bloqueios": 50,
+      "observacoes": [
+        "Após 1h, se reenviar o mesmo BP-e com a mesma rejeição, pode voltar a ser bloqueado por mais 1h, repetidamente.",
+        "A critério da UF, após 50* bloqueios o bloqueio pode ser permanente até contato com a UF."
+      ],
+      "acao_corretiva": "Pare de reenviar o mesmo BP-e rejeitado: corrija a causa da rejeição antes de retransmitir."
+    },
+    {
+      "id": "CI03",
+      "servico": "bpeConsultaBP",
+      "critica": "Facultativa",
+      "cStat": 678,
+      "condicao": "Mesma chave de acesso consultada mais de 10* vezes em 1* hora.",
+      "limite": 10,
+      "janela_segundos": 3600,
+      "bloqueio_horas": 1,
+      "observacoes": [
+        "Após 1h o contribuinte pode fazer mais 10 consultas da mesma chave.",
+        "Não use a Consulta Situação para verificar disponibilidade do serviço; use bpeStatusServicoBP."
+      ],
+      "acao_corretiva": "Armazene o retorno da consulta localmente; não consulte a mesma chave em loop."
+    },
+    {
+      "id": "CI04",
+      "servico": "bpeRecepcaoEvento",
+      "critica": "Facultativa",
+      "cStat": 678,
+      "condicao": "Evento enviado com mais de 20* rejeições iguais.",
+      "limite": 20,
+      "janela": "mesmo evento / mesma rejeição",
+      "bloqueio_horas": 1,
+      "bloqueio_permanente_apos_bloqueios": 50,
+      "observacoes": [
+        "Comportamento de reincidência igual ao CI01."
+      ],
+      "acao_corretiva": "Corrija a causa da rejeição do evento antes de reenviar."
+    },
+    {
+      "id": "CI05",
+      "servico": "outros (ex.: bpeStatusServicoBP)",
+      "critica": "Facultativa",
+      "cStat": 678,
+      "condicao": "Mais de 60* envios repetidos em 5 minutos em outro Web Service que gere erro ou onere o autorizador.",
+      "limite": 60,
+      "janela_segundos": 300,
+      "bloqueio_horas": 1,
+      "observacoes": [
+        "Para Consulta Status, aplicações em loop devem aguardar no mínimo 3 minutos entre consultas (seções 4.2.3 e 4.3.3)."
+      ],
+      "acao_corretiva": "Implemente backoff e cache; respeite 3 minutos entre consultas de status."
+    }
+  ],
+  "protecao_local_mcp": {
+    "descricao": "O rateLimiter deste servidor bloqueia preventivamente ANTES de atingir os limites do autorizador.",
+    "status_intervalo_minimo_segundos": 180,
+    "autorizacao_max_rejeicoes_iguais": 30,
+    "consulta_max_por_chave_por_hora": 10,
+    "eventos_max_rejeicoes_iguais": 20,
+    "envios_repetidos_max_5min": 60
+  },
+  "exemplos_problemas_comuns": [
+    {
+      "servico": "Envio de BP-e",
+      "problema": "Aplicação em loop reenviando o mesmo BP-e rejeitado por erro de schema ou rejeição específica; usuário reenviando manualmente (efeito pica-pau)."
+    },
+    {
+      "servico": "Registro de Evento",
+      "problema": "Loop reenviando o mesmo pedido de evento (ex.: cancelamento) que sempre é rejeitado."
+    },
+    {
+      "servico": "Consulta Situação",
+      "problema": "Uso da consulta da mesma chave para verificar disponibilidade do serviço, em loop ou durante meses."
+    },
+    {
+      "servico": "Consulta Status",
+      "problema": "Loop consumindo o serviço em frequência maior que a prevista."
+    }
+  ]
+}

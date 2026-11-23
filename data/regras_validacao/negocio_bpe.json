@@ -1,0 +1,1127 @@
+{
+  "fonte": "MOC BP-e v1.00b (abril/2019) — Manual de Orientações do Contribuinte, Padrões Técnicos de Comunicação",
+  "descricao": "Regras de negócio do BP-e (Grupo F, seção 5.3), da Consulta Situação (Grupo G, 4.2.6) e da Consulta Status (Grupo H, 4.3.6).",
+  "observacao": "Regras que dependem de bases da SEFAZ (cadastro, IBGE, BD de BP-e) não podem ser totalmente pré-validadas localmente.",
+  "grupos": {
+    "F": {
+      "nome": "Regras de Negócio do BP-e (bpeRecepcao)",
+      "secao_moc": "5.3",
+      "subgrupos": [
+        "Gerais",
+        "Viagem",
+        "Emitente",
+        "Comprador",
+        "Agência",
+        "Data de Emissão",
+        "Valores",
+        "Substituição",
+        "Banco de Dados",
+        "Autorizados ao XML",
+        "QR Code",
+        "Responsável Técnico"
+      ],
+      "regras": [
+        {
+          "id": "F01",
+          "cStat": 252,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Tipo do ambiente do BP-e difere do ambiente do Web Service.",
+          "acao_corretiva": "Use tpAmb=1 apenas nas URLs de produção e tpAmb=2 nas de homologação.",
+          "subgrupo": "Gerais"
+        },
+        {
+          "id": "F02",
+          "cStat": 226,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Código da UF do emitente difere da UF autorizadora.",
+          "acao_corretiva": "Envie para o autorizador da UF do emitente (ou SVRS, se a UF usa SEFAZ Virtual) e confira cUF.",
+          "subgrupo": "Gerais"
+        },
+        {
+          "id": "F03",
+          "cStat": 247,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Sigla da UF do emitente difere da UF autorizadora.",
+          "acao_corretiva": "Confira emit/enderEmit/UF e o endpoint utilizado.",
+          "subgrupo": "Gerais"
+        },
+        {
+          "id": "F04",
+          "cStat": 233,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Código da UF do emitente difere da sigla da UF do emitente.",
+          "acao_corretiva": "Compatibilize ide/cUF com enderEmit/UF (tabela IBGE).",
+          "subgrupo": "Gerais"
+        },
+        {
+          "id": "F05",
+          "cStat": 415,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se tpEmis=1 (Normal): dhCont e xJust não devem ser informados.",
+          "acao_corretiva": "Remova dhCont e xJust em emissão normal.",
+          "subgrupo": "Gerais"
+        },
+        {
+          "id": "F06",
+          "cStat": 416,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se tpEmis=2 (Contingência Off-Line): dhCont e xJust devem ser informados.",
+          "acao_corretiva": "Informe dhCont (data/hora de entrada em contingência) e xJust (justificativa) quando tpEmis=2.",
+          "subgrupo": "Gerais"
+        },
+        {
+          "id": "F07",
+          "cStat": 417,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se dhCont informada, deve ser menor ou igual à data de emissão.",
+          "acao_corretiva": "Ajuste dhCont para um instante anterior ou igual a dhEmi.",
+          "subgrupo": "Gerais"
+        },
+        {
+          "id": "F08",
+          "cStat": 418,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se tpEmis=2: rejeitar se a UF do emitente não aceita contingência off-line.",
+          "acao_corretiva": "A UF não permite off-line: aguarde o restabelecimento do serviço e emita em modo normal.",
+          "subgrupo": "Gerais"
+        },
+        {
+          "id": "F09",
+          "cStat": 227,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Campo Id inválido: falta literal 'BPe' ou chave do Id difere da concatenação dos campos correspondentes.",
+          "acao_corretiva": "Monte Id=\"BPe\"+chave de 44 dígitos gerada a partir de cUF, AAMM de dhEmi, CNPJ, mod=63, serie, nBP, tpEmis, cBP e cDV do próprio XML.",
+          "subgrupo": "Gerais"
+        },
+        {
+          "id": "F10",
+          "cStat": 421,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Ano da chave de acesso inferior a 2017.",
+          "acao_corretiva": "Use o AAMM da data de emissão real (ano >= 2017).",
+          "subgrupo": "Gerais"
+        },
+        {
+          "id": "F11",
+          "cStat": 253,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Dígito verificador inválido da chave resultante da concatenação dos campos.",
+          "acao_corretiva": "Recalcule o DV pelo Módulo 11 (pesos 2..9 da direita para a esquerda; resto 0 ou 1 => DV 0).",
+          "subgrupo": "Gerais"
+        },
+        {
+          "id": "F12",
+          "cStat": 409,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Município de início da viagem diverge da UF (2 primeiros dígitos do cMunIni x UFIni).",
+          "acao_corretiva": "Use código IBGE de município compatível com a UF de início.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F13",
+          "cStat": 505,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "UF de início da viagem diferente da UF do emitente.",
+          "acao_corretiva": "A viagem deve iniciar na UF do estabelecimento emitente; emita pelo estabelecimento da UF de origem.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F14",
+          "cStat": 405,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Código do município de início da viagem deve existir (tabela IBGE).",
+          "acao_corretiva": "Corrija cMunIni com código IBGE válido.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F15",
+          "cStat": 410,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Município de fim da viagem diverge da UF.",
+          "acao_corretiva": "Use código IBGE de município compatível com UFFim.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F16",
+          "cStat": 406,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se UFFim <> 'EX': código do município de fim deve existir (tabela IBGE).",
+          "acao_corretiva": "Corrija cMunFim com código IBGE válido.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F17",
+          "cStat": 411,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se UFFim = 'EX': código do município de fim deve ser 9999999.",
+          "acao_corretiva": "Para destino no exterior, informe cMunFim=9999999.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F18",
+          "cStat": 211,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Viagem interestadual (UFIni <> UFFim): grupo infPassageiro deve ser preenchido. Exceção: modal aquaviário com tpServ=9 (Travessia).",
+          "acao_corretiva": "Informe os dados do passageiro (nome, documento) em viagens interestaduais.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F19",
+          "cStat": 497,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se informado CPF do passageiro: validar CPF (dígito de controle, zeros).",
+          "acao_corretiva": "Corrija o CPF do passageiro.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F20",
+          "cStat": 419,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "infViagem NÃO múltiplo: deve existir apenas uma viagem com tpTrecho=1 (Normal).",
+          "acao_corretiva": "Para viagem simples use um único infViagem com tpTrecho=1.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F21",
+          "cStat": 638,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "infViagem múltiplo e modal diferente de ferroviário: conexão não permitida.",
+          "acao_corretiva": "Conexões (múltiplos trechos) só são permitidas no modal ferroviário; emita um BP-e por trecho.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F22",
+          "cStat": 420,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "infViagem múltiplo: deve existir um trecho inicial (tpTrecho=2) e os demais do tipo conexão (tpTrecho=3).",
+          "acao_corretiva": "Ajuste tpTrecho: primeiro trecho=2, demais=3.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F23",
+          "cStat": 484,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se tpTrecho=3 (Conexão): a data-hora da conexão deve ser informada.",
+          "acao_corretiva": "Informe dhConexao nos trechos de conexão.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F24",
+          "cStat": 485,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se tpTrecho=1 ou 2: data-hora da conexão NÃO deve ser informada.",
+          "acao_corretiva": "Remova dhConexao de trechos normais/iniciais.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F25",
+          "cStat": 486,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Data-hora da conexão deve ser maior que a data-hora do embarque.",
+          "acao_corretiva": "Ajuste dhConexao para depois de dhViagem/embarque.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F26",
+          "cStat": 639,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Modal aquaviário com tpServ=9 (Travessia): grupo infTravessia deve ser preenchido.",
+          "acao_corretiva": "Informe o grupo infTravessia.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F27",
+          "cStat": 498,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Modal diferente de aquaviário: tpServ deve ser diferente de 9 (Travessia).",
+          "acao_corretiva": "Use tipo de serviço compatível com o modal.",
+          "subgrupo": "Viagem"
+        },
+        {
+          "id": "F28",
+          "cStat": 207,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Validar CNPJ do emitente (dígito de controle, zeros ou nulo).",
+          "acao_corretiva": "Corrija o CNPJ do emitente.",
+          "subgrupo": "Emitente"
+        },
+        {
+          "id": "F29",
+          "cStat": 229,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "IE do emitente deve ser informada (zeros ou nulo).",
+          "acao_corretiva": "Informe a IE do emitente.",
+          "subgrupo": "Emitente"
+        },
+        {
+          "id": "F30",
+          "cStat": 209,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Validar IE do emitente (dígito de controle). A SEFAZ normaliza a IE com zeros não significativos antes da validação.",
+          "acao_corretiva": "Corrija a IE do emitente conforme o formato da UF.",
+          "subgrupo": "Emitente"
+        },
+        {
+          "id": "F31",
+          "cStat": 203,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Emitente não credenciado para emissão de BP-e.",
+          "acao_corretiva": "Solicite o credenciamento para BP-e junto à SEFAZ da UF (e no ambiente correto: homologação/produção).",
+          "subgrupo": "Emitente"
+        },
+        {
+          "id": "F32",
+          "cStat": 230,
+          "critica": "Facultativa",
+          "efeito": "Rejeição",
+          "regra": "IE do emitente não cadastrada (Cadastro de Emitentes CNE, chave UF+IE).",
+          "acao_corretiva": "Confirme a IE no cadastro da SEFAZ.",
+          "subgrupo": "Emitente"
+        },
+        {
+          "id": "F33",
+          "cStat": 231,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "IE do emitente deve estar vinculada ao CNPJ (tratar Regime Especial de IE única).",
+          "acao_corretiva": "Verifique o vínculo IE x CNPJ no cadastro estadual.",
+          "subgrupo": "Emitente"
+        },
+        {
+          "id": "F34",
+          "cStat": 205,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Emitente em situação irregular perante o Fisco.",
+          "acao_corretiva": "Regularize a situação cadastral/fiscal junto à SEFAZ.",
+          "subgrupo": "Emitente"
+        },
+        {
+          "id": "F35",
+          "cStat": 407,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Município do emitente diverge da UF.",
+          "acao_corretiva": "Corrija enderEmit/cMun para município da UF do emitente.",
+          "subgrupo": "Emitente"
+        },
+        {
+          "id": "F36",
+          "cStat": 408,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Código do município do emitente inexistente (tabela IBGE).",
+          "acao_corretiva": "Corrija enderEmit/cMun.",
+          "subgrupo": "Emitente"
+        },
+        {
+          "id": "F37",
+          "cStat": 414,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Modal rodoviário: Termo de Autorização de Serviço Regular (TAR) deve ser informado.",
+          "acao_corretiva": "Informe a tag TAR do emitente no modal rodoviário.",
+          "subgrupo": "Emitente"
+        },
+        {
+          "id": "F38",
+          "cStat": 422,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se CNPJ do comprador informado: validar (dígito de controle, zeros).",
+          "acao_corretiva": "Corrija o CNPJ do comprador.",
+          "subgrupo": "Comprador"
+        },
+        {
+          "id": "F39",
+          "cStat": 423,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se CPF do comprador informado: validar (dígito de controle, zeros).",
+          "acao_corretiva": "Corrija o CPF do comprador.",
+          "subgrupo": "Comprador"
+        },
+        {
+          "id": "F40",
+          "cStat": 424,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se informado comprador: município deve pertencer à UF.",
+          "acao_corretiva": "Compatibilize cMun e UF do comprador.",
+          "subgrupo": "Comprador"
+        },
+        {
+          "id": "F41",
+          "cStat": 425,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Comprador com endereço não exterior: município deve existir (IBGE).",
+          "acao_corretiva": "Corrija o código de município do comprador.",
+          "subgrupo": "Comprador"
+        },
+        {
+          "id": "F42",
+          "cStat": 426,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Comprador com endereço exterior (UF='EX'): município deve ser 9999999.",
+          "acao_corretiva": "Informe cMun=9999999 para comprador no exterior.",
+          "subgrupo": "Comprador"
+        },
+        {
+          "id": "F43",
+          "cStat": 427,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se IE do comprador informada: validar dígito de controle (após normalização).",
+          "acao_corretiva": "Corrija a IE do comprador ou omita-a.",
+          "subgrupo": "Comprador"
+        },
+        {
+          "id": "F44",
+          "cStat": 428,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se IE do comprador informada: deve estar cadastrada na UF.",
+          "acao_corretiva": "Confirme a IE do comprador no cadastro (CCC).",
+          "subgrupo": "Comprador"
+        },
+        {
+          "id": "F45",
+          "cStat": 429,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se IE e CNPJ do comprador informados: IE deve estar vinculada ao CNPJ.",
+          "acao_corretiva": "Confira o vínculo IE x CNPJ do comprador.",
+          "subgrupo": "Comprador"
+        },
+        {
+          "id": "F46",
+          "cStat": 430,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se IE do comprador = 'ISENTO' ou não informada: rejeitar se comprador possui IE ativa na UF.",
+          "acao_corretiva": "Informe a IE ativa do comprador.",
+          "subgrupo": "Comprador"
+        },
+        {
+          "id": "F47",
+          "cStat": 431,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se informada agência: validar CNPJ (DV, zeros). Agência do exterior pode ter zeros.",
+          "acao_corretiva": "Corrija o CNPJ da agência.",
+          "subgrupo": "Agência"
+        },
+        {
+          "id": "F48",
+          "cStat": 432,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se informada agência: município deve pertencer à UF.",
+          "acao_corretiva": "Compatibilize cMun e UF da agência.",
+          "subgrupo": "Agência"
+        },
+        {
+          "id": "F49",
+          "cStat": 433,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Agência com endereço não exterior: município deve existir (IBGE).",
+          "acao_corretiva": "Corrija cMun da agência.",
+          "subgrupo": "Agência"
+        },
+        {
+          "id": "F50",
+          "cStat": 503,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Agência com endereço exterior (UF='EX'): município deve ser 9999999.",
+          "acao_corretiva": "Informe cMun=9999999 para agência no exterior.",
+          "subgrupo": "Agência"
+        },
+        {
+          "id": "F51",
+          "cStat": 212,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Data/hora de emissão posterior à data/hora de recebimento (tolerância de 5 minutos, considerando a hora local do emissor).",
+          "acao_corretiva": "Sincronize o relógio do servidor (NTP) e informe dhEmi com o fuso correto (ex.: -03:00).",
+          "subgrupo": "Data de Emissão"
+        },
+        {
+          "id": "F52",
+          "cStat": 228,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpEmis=1: data-hora de emissão com atraso superior a 5 minutos em relação à recepção. A critério da UF, off-line transmitido após 24h retorna cStat 150.",
+          "acao_corretiva": "Emita e transmita em tempo real; se houver falha de comunicação, use contingência off-line (tpEmis=2) quando permitido.",
+          "subgrupo": "Data de Emissão"
+        },
+        {
+          "id": "F53",
+          "cStat": 219,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Data-hora do embarque não pode ser superior a 1 ano da data de emissão.",
+          "acao_corretiva": "Ajuste a data de embarque para até 1 ano após a emissão.",
+          "subgrupo": "Data de Emissão"
+        },
+        {
+          "id": "F54",
+          "cStat": 254,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Data-hora do embarque deve ser igual ou superior à data de emissão.",
+          "acao_corretiva": "Não emita BP-e com embarque no passado (use dhEmi <= dhEmb).",
+          "subgrupo": "Data de Emissão"
+        },
+        {
+          "id": "F55",
+          "cStat": 506,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "BP-e Normal: data de validade deve ser 1 ano após a data de emissão (366 dias em ano bissexto, 365 nos demais).",
+          "acao_corretiva": "Calcule dhValidade = dhEmi + 1 ano.",
+          "subgrupo": "Data de Emissão"
+        },
+        {
+          "id": "F56",
+          "cStat": 507,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "BP-e de Substituição: data de validade deve ser igual à do BP-e Normal originalmente autorizado.",
+          "acao_corretiva": "Copie a data de validade do BP-e original.",
+          "subgrupo": "Data de Emissão"
+        },
+        {
+          "id": "F57",
+          "cStat": 434,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Valor total do bilhete (vBP) não pode ultrapassar R$ 999.999,99 (a SEFAZ pode aumentar o limite).",
+          "acao_corretiva": "Verifique o valor (possível erro de casas decimais).",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F58",
+          "cStat": 435,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Valor do ICMS deve corresponder à base de cálculo x alíquota (tolerância R$ 0,01).",
+          "acao_corretiva": "Recalcule vICMS = vBC x pICMS / 100 com arredondamento em 2 casas.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F59",
+          "cStat": 436,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Soma dos componentes (Comp/vComp) deve corresponder ao vBP (tolerância R$ 1,00).",
+          "acao_corretiva": "Garanta que a soma de vComp feche com vBP.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F60",
+          "cStat": 437,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se informado tpDesconto: xDesconto deve ser informado.",
+          "acao_corretiva": "Informe a descrição do desconto (xDesconto).",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F61",
+          "cStat": 401,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se informado tpDesconto: vDesconto deve ser maior que zero.",
+          "acao_corretiva": "Informe vDesconto > 0 ou remova tpDesconto.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F62",
+          "cStat": 500,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se vDesconto > 0 e/ou xDesconto informado: tpDesconto deve ser preenchido.",
+          "acao_corretiva": "Informe tpDesconto.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F63",
+          "cStat": 511,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se tpDesconto = 99 (Outros): cDesconto deve ser preenchido.",
+          "acao_corretiva": "Informe o código do desconto (cDesconto).",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F64",
+          "cStat": 682,
+          "critica": "Facultativa",
+          "efeito": "Rejeição",
+          "regra": "Transporte intermunicipal com tpDesconto: verificar se o passageiro possui desconto concedido na base do órgão regulador estadual.",
+          "acao_corretiva": "Confirme o benefício do passageiro no órgão regulador antes de emitir.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F65",
+          "cStat": 501,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se NÃO informado tpDesconto: rejeitar se valor do BP-e for igual a zero.",
+          "acao_corretiva": "BP-e sem desconto deve ter valor > 0; para gratuidade informe tpDesconto.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F66",
+          "cStat": 499,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Valor do ICMS não pode ser superior ao valor do bilhete.",
+          "acao_corretiva": "Revise base de cálculo e alíquota.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F67",
+          "cStat": 438,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Somatório das formas de pagamento (pag/vPag) deve ser igual a vPgto + vTroco (tolerância R$ 1,00).",
+          "acao_corretiva": "Ajuste os valores de pagamento e troco.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F68",
+          "cStat": 403,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Valor pago (vPgto) deve corresponder a vBP menos vDesconto.",
+          "acao_corretiva": "Calcule vPgto = vBP - vDesconto.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F69",
+          "cStat": 475,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se tPag = 03 ou 04 (cartão): grupo card deve ser informado.",
+          "acao_corretiva": "Informe o grupo card para pagamentos com cartão.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F70",
+          "cStat": 477,
+          "critica": "Facultativa",
+          "efeito": "Rejeição",
+          "regra": "tpIntegra=2 (pagamento não integrado) em UF que não aceita esse tipo de integração.",
+          "acao_corretiva": "Use pagamento integrado (tpIntegra=1) ou confirme a regra da UF.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F71",
+          "cStat": 502,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Se informado CNPJ da credenciadora (card/CNPJ): validar DV e zeros.",
+          "acao_corretiva": "Corrija o CNPJ da credenciadora.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F72",
+          "cStat": 478,
+          "critica": "Facultativa",
+          "efeito": "Rejeição",
+          "regra": "Se informado grupo card com tpIntegra=1: card/CNPJ e card/cAut devem ser informados.",
+          "acao_corretiva": "Informe CNPJ da credenciadora e código de autorização.",
+          "subgrupo": "Valores"
+        },
+        {
+          "id": "F73",
+          "cStat": 439,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 (Substituição): grupo infBPeSub deve ser informado.",
+          "acao_corretiva": "Informe infBPeSub com a chave do BP-e substituído e o tipo de substituição.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F74",
+          "cStat": 440,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=0 (Normal): grupo infBPeSub NÃO deve ser informado.",
+          "acao_corretiva": "Remova infBPeSub em BP-e normal.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F75",
+          "cStat": 508,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3: validar chave de acesso do BP-e substituído.",
+          "acao_corretiva": "Corrija a chave do BP-e substituído (44 dígitos, DV válido, modelo 63).",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F76",
+          "cStat": 449,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3: o BP-e substituído deve existir.",
+          "acao_corretiva": "Confirme que o BP-e original foi autorizado (consulte a situação).",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F77",
+          "cStat": 450,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3: BP-e substituído não pode existir com diferença na chave de acesso.",
+          "acao_corretiva": "Use a chave exatamente igual à autorizada (retornada no xMotivo).",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F78",
+          "cStat": 451,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3: BP-e substituído não pode estar cancelado.",
+          "acao_corretiva": "Não é possível substituir BP-e cancelado; emita um novo BP-e normal.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F79",
+          "cStat": 452,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3: BP-e substituído não pode estar substituído.",
+          "acao_corretiva": "Substitua o BP-e substituto mais recente.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F80",
+          "cStat": 453,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e embarque do substituído <= data-hora atual: o substituído deve possuir evento de Não Embarque.",
+          "acao_corretiva": "Registre o evento de Não Embarque (110115) no BP-e original antes de substituí-lo.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F81",
+          "cStat": 454,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3: CNPJ do emitente do substituto deve ser igual ao do substituído.",
+          "acao_corretiva": "Emita a substituição pelo mesmo CNPJ.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F82",
+          "cStat": 455,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3: IE do emitente do substituto deve ser igual à do substituído.",
+          "acao_corretiva": "Emita a substituição pela mesma IE.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F83",
+          "cStat": 456,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3: CNPJ/CPF do comprador do substituto deve ser igual ao do substituído.",
+          "acao_corretiva": "Mantenha o comprador do BP-e original.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F84",
+          "cStat": 457,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3: IE do comprador do substituto deve ser igual à do substituído.",
+          "acao_corretiva": "Mantenha a IE do comprador original.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F85",
+          "cStat": 458,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3: UF e município de início e fim devem ser iguais aos do substituído.",
+          "acao_corretiva": "Mantenha origem e destino do BP-e original.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F86",
+          "cStat": 459,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e tpSub <> 1 (Remarcação): rejeitar se o substituído possuir desconto/benefício (exceto tpDesconto=01 Tarifa promocional).",
+          "acao_corretiva": "Bilhete com benefício não pode ser transferido.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F87",
+          "cStat": 460,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e tpSub=1 (Remarcação): nome do passageiro deve ser o mesmo do substituído. (No MOC esta regra aparece identificada como 'G87'.)",
+          "acao_corretiva": "Mantenha o passageiro na remarcação.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F88",
+          "cStat": 492,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e tpSub=1: CPF do passageiro deve ser o mesmo.",
+          "acao_corretiva": "Mantenha o CPF do passageiro.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F89",
+          "cStat": 493,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e tpSub=1: número do documento do passageiro deve ser o mesmo.",
+          "acao_corretiva": "Mantenha o documento do passageiro.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F90",
+          "cStat": 491,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e tpSub=2 (Transferência): identificação do passageiro obrigatória.",
+          "acao_corretiva": "Informe o grupo infPassageiro.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F91",
+          "cStat": 461,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e tpSub=2: nome do passageiro deve ser diferente do substituído.",
+          "acao_corretiva": "Na transferência o passageiro deve mudar.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F92",
+          "cStat": 494,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e tpSub=2: CPF deve ser diferente do substituído.",
+          "acao_corretiva": "Informe o CPF do novo passageiro.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F93",
+          "cStat": 495,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e tpSub=2: documento do passageiro deve ser diferente do substituído.",
+          "acao_corretiva": "Informe o documento do novo passageiro.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F94",
+          "cStat": 462,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e tpSub=1: data/hora do embarque deve ser diferente da do substituído.",
+          "acao_corretiva": "Na remarcação a data/hora de embarque deve mudar.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F95",
+          "cStat": 463,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e tpSub=2: data/hora do embarque deve ser igual à do substituído.",
+          "acao_corretiva": "Na transferência mantenha a data/hora de embarque.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F96",
+          "cStat": 464,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3 e tpSub=3 (Remarcação e Transferência): embarque, nome, CPF e nDoc devem ser diferentes.",
+          "acao_corretiva": "Altere data de embarque e passageiro.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F97",
+          "cStat": 465,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpBPe=3: autorização da substituição deve ocorrer em até 1 ano da emissão do BP-e Normal original.",
+          "acao_corretiva": "Prazo de substituição expirado.",
+          "subgrupo": "Substituição"
+        },
+        {
+          "id": "F98",
+          "cStat": 539,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Duplicidade de BP-e com diferença na chave de acesso (código numérico difere). Retorna chBPe, nProt e dhAut já autorizados.",
+          "acao_corretiva": "O número/série já foi autorizado com outra chave: consulte a chave retornada; não reenvie com novo cBP. Se for outro bilhete, use novo número.",
+          "subgrupo": "Banco de Dados"
+        },
+        {
+          "id": "F99",
+          "cStat": 204,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Duplicidade de BP-e. Retorna nProt e dhAut.",
+          "acao_corretiva": "O BP-e já está autorizado: consulte a situação (bpeConsultaBP) para obter o protocolo em vez de reenviar.",
+          "subgrupo": "Banco de Dados"
+        },
+        {
+          "id": "F100",
+          "cStat": 218,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "BP-e está cancelado. Retorna nProt e dhCanc.",
+          "acao_corretiva": "Documento já cancelado; não reenvie.",
+          "subgrupo": "Banco de Dados"
+        },
+        {
+          "id": "F101",
+          "cStat": 224,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "BP-e está substituído. Retorna nProt e dhSubst.",
+          "acao_corretiva": "Documento já substituído; não reenvie.",
+          "subgrupo": "Banco de Dados"
+        },
+        {
+          "id": "F102",
+          "cStat": 466,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "autXML com CNPJ: CNPJ com zeros ou DV inválido.",
+          "acao_corretiva": "Corrija o CNPJ em autXML.",
+          "subgrupo": "Autorizados ao XML"
+        },
+        {
+          "id": "F103",
+          "cStat": 467,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "autXML com CPF: CPF com zeros, nulo, repetido ou DV inválido.",
+          "acao_corretiva": "Corrija o CPF em autXML.",
+          "subgrupo": "Autorizados ao XML"
+        },
+        {
+          "id": "F104",
+          "cStat": 412,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "autXML: duplicidade de CPF/CNPJ no grupo.",
+          "acao_corretiva": "Remova documentos repetidos de autXML.",
+          "subgrupo": "Autorizados ao XML"
+        },
+        {
+          "id": "F105",
+          "cStat": 479,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Endereço do site da UF para consulta via QR Code difere do previsto (sem diferenciar maiúsculas/minúsculas). Ver https://dfe-portal.svrs.rs.gov.br/BPE/Servicos",
+          "acao_corretiva": "Use a URL de QR Code oficial da UF/ambiente em infBPeSupl/qrCodBPe.",
+          "subgrupo": "QR Code"
+        },
+        {
+          "id": "F106",
+          "cStat": 481,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Parâmetro chBPe do QR Code diverge da chave de acesso do BP-e.",
+          "acao_corretiva": "Monte o QR Code com a mesma chave do Id.",
+          "subgrupo": "QR Code"
+        },
+        {
+          "id": "F107",
+          "cStat": 482,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Contingência off-line: parâmetro sign deve ser informado no QR Code.",
+          "acao_corretiva": "Inclua &sign=<RSA-SHA1 Base64 da chave> no QR Code.",
+          "subgrupo": "QR Code"
+        },
+        {
+          "id": "F108",
+          "cStat": 488,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Emissão normal: parâmetro sign não deve ser informado no QR Code.",
+          "acao_corretiva": "Remova sign do QR Code em tpEmis=1.",
+          "subgrupo": "QR Code"
+        },
+        {
+          "id": "F109",
+          "cStat": 496,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Contingência off-line: valor de sign difere do calculado.",
+          "acao_corretiva": "Assine a chave de 44 dígitos (string) com a chave privada do mesmo certificado que assina o BP-e, RSA-SHA1, em Base64.",
+          "subgrupo": "QR Code"
+        },
+        {
+          "id": "F110",
+          "cStat": 679,
+          "critica": "Facultativa",
+          "efeito": "Rejeição",
+          "regra": "Não informado o grupo do responsável técnico (implementação a critério da UF).",
+          "acao_corretiva": "Informe o grupo infRespTec.",
+          "subgrupo": "Responsável Técnico"
+        },
+        {
+          "id": "F111",
+          "cStat": 510,
+          "critica": "Facultativa",
+          "efeito": "Rejeição",
+          "regra": "Se informado infRespTec: validar CNPJ (DV, zeros ou nulo).",
+          "acao_corretiva": "Corrija o CNPJ do responsável técnico.",
+          "subgrupo": "Responsável Técnico"
+        },
+        {
+          "id": "F112",
+          "cStat": 680,
+          "critica": "Facultativa",
+          "efeito": "Rejeição",
+          "regra": "Obrigatória a informação de idCSRT e hashCSRT (implementação futura).",
+          "acao_corretiva": "Informe idCSRT e hashCSRT quando exigidos pela UF.",
+          "subgrupo": "Responsável Técnico"
+        }
+      ]
+    },
+    "G": {
+      "nome": "Regras de Negócio da Consulta Situação (bpeConsultaBP)",
+      "secao_moc": "4.2.6",
+      "regras": [
+        {
+          "id": "G01",
+          "cStat": 252,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Tipo do ambiente difere do ambiente do Web Service.",
+          "acao_corretiva": "Use tpAmb coerente com a URL."
+        },
+        {
+          "id": "G02",
+          "cStat": 226,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "UF da chave de acesso difere da UF do Web Service.",
+          "acao_corretiva": "Consulte no autorizador da UF da chave."
+        },
+        {
+          "id": "G03",
+          "cStat": 413,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Ano-mês da chave de acesso com atraso superior a 6 meses em relação ao atual.",
+          "acao_corretiva": "Chaves com mais de 6 meses não são consultáveis por este serviço; use a consulta pública."
+        },
+        {
+          "id": "G04",
+          "cStat": 236,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Chave de acesso inválida (CNPJ, ano < 2017 ou futuro, mês, modelo <> 63, número zerado, tpEmis, UF ou DV).",
+          "acao_corretiva": "Valide a chave localmente (bpe_gerar_chave_acesso / validar) antes de consultar; o xMotivo indica o motivo."
+        },
+        {
+          "id": "G05",
+          "cStat": 217,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "BP-e não existe na base (chave natural: CNPJ, modelo, série, número).",
+          "acao_corretiva": "Confirme se o BP-e foi transmitido; se emitido em contingência, transmita-o."
+        },
+        {
+          "id": "G06",
+          "cStat": 216,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Código numérico da chave difere do existente no BD.",
+          "acao_corretiva": "Use a chave exatamente como autorizada."
+        },
+        {
+          "id": "G07",
+          "cStat": 600,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Chave de acesso difere da existente em BD.",
+          "acao_corretiva": "Use a chave retornada no xMotivo (quando o consulente é o emissor)."
+        }
+      ]
+    },
+    "H": {
+      "nome": "Regras de Negócio da Consulta Status (bpeStatusServicoBP)",
+      "secao_moc": "4.3.6",
+      "regras": [
+        {
+          "id": "H01",
+          "cStat": 252,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Tipo do ambiente informado difere do ambiente do Web Service.",
+          "acao_corretiva": "Use tpAmb coerente com a URL."
+        },
+        {
+          "id": "H02",
+          "cStat": 108,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Servidor de processamento paralisado momentaneamente.",
+          "acao_corretiva": "Aguarde; consulte novamente após no mínimo 3 minutos."
+        },
+        {
+          "id": "H03",
+          "cStat": 109,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Servidor de processamento paralisado sem previsão.",
+          "acao_corretiva": "Avalie contingência off-line."
+        }
+      ]
+    }
+  }
+}

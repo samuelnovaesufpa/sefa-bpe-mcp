@@ -1,0 +1,52 @@
+{
+  "fonte": "MOC BP-e v1.00b (abril/2019) — Manual de Orientações do Contribuinte, Padrões Técnicos de Comunicação",
+  "secao_moc": "11.3",
+  "descricao": "Mensagens usadas pela SEFAZ na consulta pública do BP-e (digitação da chave ou QR Code). Não são cStat de Web Service.",
+  "padrao_enderecos": {
+    "consulta_chave": "http(s)://URL_da_SEFAZ/BPe/consulta",
+    "consulta_qrcode": "http(s)://URL_da_SEFAZ/BPe/qrcode",
+    "relacao_oficial": "https://dfe-portal.svrs.rs.gov.br/BPe/Servicos"
+  },
+  "codigos": [
+    {
+      "codigo": 201,
+      "regra": "Chave de acesso não preenchida ou com menos de 44 caracteres.",
+      "exibir": "Problemas no preenchimento da Chave de Acesso do BP-e"
+    },
+    {
+      "codigo": 202,
+      "regra": "Dígito verificador da chave de acesso inválido.",
+      "exibir": "Problemas na Chave de Acesso do BP-e (dígito verificador inválido)"
+    },
+    {
+      "codigo": 203,
+      "regra": "Modelo da chave difere de 63, CNPJ do emitente com DV inválido ou UF da chave diferente da UF da consulta.",
+      "exibir": "Problemas na Chave de Acesso do BP-e (modelo ou CNPJ ou UF inválido)"
+    },
+    {
+      "codigo": 204,
+      "regra": "Parâmetro tpAmb não preenchido ou diferente de 1 ou 2 no QR Code.",
+      "exibir": "Inconsistência de Informações no QR Code (tipo ambiente)"
+    },
+    {
+      "codigo": 205,
+      "regra": "Forma de emissão 1 (normal) e BP-e não encontrado na base.",
+      "exibir": "O BP-e não consta na nossa base de dados"
+    },
+    {
+      "codigo": 206,
+      "regra": "Forma de emissão 2 (contingência off-line) e BP-e não encontrado na base.",
+      "exibir": "O BP-e foi emitido em contingência e não consta na nossa base de dados. Volte a consultar após 24h."
+    },
+    {
+      "codigo": 207,
+      "regra": "BP-e possui evento de cancelamento.",
+      "exibir": "O BP-e foi Cancelado - Documento Inválido – Sem Valor Fiscal"
+    },
+    {
+      "codigo": 208,
+      "regra": "BP-e possui evento de Substituição.",
+      "exibir": "O BP-e foi Substituído - Documento Inválido – Sem Valor Fiscal"
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "fonte": "MOC BP-e v1.00b (abril/2019) — Manual de Orientações do Contribuinte, Padrões Técnicos de Comunicação",
+  "secao_moc": "3.6.1 / 6 / 7",
+  "servico": "bpeRecepcaoEvento",
+  "schema_generico": "eventoBPe_v9.99.xsd",
+  "schema_retorno": "retEventoBPe_v9.99.xsd",
+  "formacao_id": "\"ID\" + tpEvento (6) + chBPe (44) + nSeqEvento (2, com zero à esquerda) — 54 caracteres",
+  "cStat_sucesso": {
+    "135": "Evento registrado e vinculado a BP-e",
+    "134": "Evento registrado com alerta para situação",
+    "136": "Evento registrado, mas não vinculado a BP-e"
+  },
+  "eventos": [
+    {
+      "tpEvento": "110111",
+      "descricao": "Cancelamento",
+      "descEvento": "Cancelamento",
+      "autor": "1-Empresa Emitente",
+      "meio": "1=via WS Evento",
+      "bpe_deve_existir": true,
+      "schema": "evCancBPe_v9.99.xsd",
+      "tag_raiz": "evCancBPe",
+      "nSeqEvento_max": 1,
+      "campos": [
+        {
+          "tag": "descEvento",
+          "tipo": "C",
+          "tam": "12",
+          "valor": "Cancelamento"
+        },
+        {
+          "tag": "nProt",
+          "tipo": "N",
+          "tam": "15",
+          "desc": "Protocolo de autorização do BP-e"
+        },
+        {
+          "tag": "xJust",
+          "tipo": "C",
+          "tam": "1-255",
+          "desc": "Justificativa do cancelamento"
+        }
+      ],
+      "regras_negocio": [
+        "Não permitido após o embarque (tolerância 5 min; em contingência até 24h após o embarque) — cStat 220",
+        "Não permitido se houver evento de Não Embarque — cStat 504",
+        "Situação do BP-e passa a 101 – Cancelamento homologado"
+      ],
+      "regras_ref": "regras_validacao/eventos.json#J/110111"
+    },
+    {
+      "tpEvento": "110115",
+      "descricao": "Não Embarque",
+      "descEvento": "Não Embarque",
+      "autor": "1-Empresa Emitente",
+      "meio": "1=via WS Evento",
+      "bpe_deve_existir": true,
+      "schema": "evNaoEmbBPe_v9.99.xsd",
+      "tag_raiz": "evNaoEmbBPe",
+      "nSeqEvento_max": 1,
+      "campos": [
+        {
+          "tag": "descEvento",
+          "tipo": "C",
+          "tam": "12",
+          "valor": "Não Embarque"
+        },
+        {
+          "tag": "nProt",
+          "tipo": "N",
+          "tam": "15"
+        },
+        {
+          "tag": "xJust",
+          "tipo": "C",
+          "tam": "1-255",
+          "desc": "Justificativa do não embarque"
+        }
+      ],
+      "regras_negocio": [
+        "Somente após a data-hora de embarque — cStat 234",
+        "Até 24h após o embarque — cStat 221",
+        "Pré-requisito para substituição de BP-e com embarque já ocorrido (regra F80 / cStat 453)"
+      ],
+      "regras_ref": "regras_validacao/eventos.json#J/110115"
+    },
+    {
+      "tpEvento": "110116",
+      "descricao": "Alteração de Poltrona",
+      "descEvento": "Alteração de Poltrona (ou 'Alteracao de Poltrona')",
+      "autor": "1-Empresa Emitente",
+      "meio": "1=via WS Evento",
+      "bpe_deve_existir": true,
+      "schema": "evAlteracaoPoltrona_v9.99.xsd",
+      "tag_raiz": "evAlteracaoPoltrona",
+      "nSeqEvento_max": 99,
+      "campos": [
+        {
+          "tag": "descEvento",
+          "tipo": "C",
+          "tam": "21",
+          "valor": "Alteração de Poltrona"
+        },
+        {
+          "tag": "nProt",
+          "tipo": "N",
+          "tam": "15"
+        },
+        {
+          "tag": "poltrona",
+          "tipo": "N",
+          "tam": "3",
+          "desc": "Número da nova poltrona/assento/cabine"
+        }
+      ],
+      "regras_negocio": [
+        "Troca de assento sem alteração de valores ou data de embarque",
+        "Até 24h da data-hora de embarque — cStat 235",
+        "Poltrona deve ser diferente da atual — cStat 237",
+        "Não permitido após Não Embarque — cStat 681"
+      ],
+      "regras_ref": "regras_validacao/eventos.json#J/110116"
+    },
+    {
+      "tpEvento": "240140",
+      "descricao": "Autorizado Substituição",
+      "autor": "2-Fisco Emitente",
+      "meio": "1=via WS Evento",
+      "bpe_deve_existir": true,
+      "evento_de_marcacao": true,
+      "observacao": "Evento de marcação gerado automaticamente pelo Fisco na autorização de um BP-e de substituição, assinado com certificado da SEFAZ. Não é enviado pelo contribuinte. Consta na consulta pública do BP-e referenciado.",
+      "schema": "PENDENTE — verificar no Pacote de Liberação (PL_BPe) do Portal SVRS"
+    }
+  ]
+}

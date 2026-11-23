@@ -1,0 +1,380 @@
+{
+  "fonte": "MOC BP-e v1.00b (abril/2019) — Manual de Orientações do Contribuinte, Padrões Técnicos de Comunicação",
+  "descricao": "Regras do Sistema de Registro de Eventos: parte geral (Grupo I, seção 6) e parte específica (Grupo J, seção 7). Antes do Grupo I aplicam-se também os grupos A, B, C, D e E (certificado_xml.json).",
+  "grupos": {
+    "I": {
+      "nome": "Regras de Negócio dos Eventos — Parte Geral",
+      "secao_moc": "6.8",
+      "regras": [
+        {
+          "id": "I01",
+          "cStat": 252,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Tipo do ambiente difere do ambiente do Web Service.",
+          "acao_corretiva": "Use tpAmb coerente com a URL."
+        },
+        {
+          "id": "I02",
+          "cStat": 226,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Código do órgão de recepção do evento (cOrgao) diverge do solicitado.",
+          "acao_corretiva": "Informe cOrgao = código IBGE da UF autorizadora."
+        },
+        {
+          "id": "I04",
+          "cStat": 627,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Validar CNPJ do autor do evento (DV ou zeros).",
+          "acao_corretiva": "Corrija o CNPJ do autor."
+        },
+        {
+          "id": "I05",
+          "cStat": 628,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Atributo Id deve corresponder a 'ID' + tpEvento + chBPe + nSeqEvento.",
+          "acao_corretiva": "Monte Id = \"ID\" + tpEvento(6) + chBPe(44) + nSeqEvento com 2 dígitos (total 54 caracteres)."
+        },
+        {
+          "id": "I06",
+          "cStat": 629,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "tpEvento inválido.",
+          "acao_corretiva": "Use 110111, 110115 ou 110116 (eventos do emitente)."
+        },
+        {
+          "id": "I07",
+          "cStat": 630,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Falha no schema da parte específica do evento (identificado por tpEvento + versaoEvento).",
+          "acao_corretiva": "Valide detEvento contra o XSD do evento (evCancBPe, evNaoEmbBPe, evAlteracaoPoltrona)."
+        },
+        {
+          "id": "I08",
+          "cStat": 236,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Chave de acesso inválida.",
+          "acao_corretiva": "Valide a chave localmente."
+        },
+        {
+          "id": "I16",
+          "cStat": 631,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Duplicidade do evento (cOrgao + tpEvento + chBPe + nSeqEvento).",
+          "acao_corretiva": "O evento já foi registrado: consulte a situação do BP-e para obter o protocolo; para poltrona incremente nSeqEvento."
+        },
+        {
+          "id": "I17",
+          "cStat": 632,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Evento do emissor: CNPJ do autor diferente do CNPJ da chave de acesso.",
+          "acao_corretiva": "O autor deve ser o emitente do BP-e."
+        },
+        {
+          "id": "I18",
+          "cStat": 633,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Evento do Fisco/órgãos: CNPJ do autor não consta da tabela de órgãos autorizados.",
+          "acao_corretiva": "Somente órgãos autorizados podem gerar este evento."
+        },
+        {
+          "id": "I19",
+          "cStat": 217,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Evento que exige BP-e: BP-e não existe.",
+          "acao_corretiva": "Confirme a autorização do BP-e antes de registrar o evento."
+        },
+        {
+          "id": "I20",
+          "cStat": 600,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Chave de acesso difere da existente em BD.",
+          "acao_corretiva": "Use a chave autorizada."
+        },
+        {
+          "id": "I21",
+          "cStat": 634,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Data do evento menor que a data de emissão do BP-e (tolerância 5 min).",
+          "acao_corretiva": "Corrija dhEvento / relógio do servidor."
+        },
+        {
+          "id": "I22",
+          "cStat": 637,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Data do evento menor que a data de autorização do BP-e (tolerância 5 min).",
+          "acao_corretiva": "Corrija dhEvento / relógio do servidor."
+        },
+        {
+          "id": "I23",
+          "cStat": 635,
+          "critica": "Obrigatória",
+          "efeito": "Rejeição",
+          "regra": "Data do evento maior que a data de processamento (tolerância 5 min).",
+          "acao_corretiva": "Sincronize o relógio (NTP) e use o fuso correto."
+        }
+      ]
+    },
+    "J": {
+      "nome": "Regras Específicas dos Eventos",
+      "secao_moc": "7",
+      "eventos": {
+        "110111": {
+          "nome": "Cancelamento",
+          "secao_moc": "7.1",
+          "regras": [
+            {
+              "id": "J01",
+              "cStat": 249,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "UF da chave de acesso difere da UF do Web Service.",
+              "acao_corretiva": "Envie ao autorizador da UF da chave."
+            },
+            {
+              "id": "J02",
+              "cStat": 636,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "nSeqEvento maior que o permitido (=1).",
+              "acao_corretiva": "Use nSeqEvento=1."
+            },
+            {
+              "id": "J03",
+              "cStat": 203,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Emitente deve estar habilitado para emissão de BP-e.",
+              "acao_corretiva": "Verifique o credenciamento."
+            },
+            {
+              "id": "J04",
+              "cStat": 240,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Situação fiscal irregular do emitente.",
+              "acao_corretiva": "Regularize a situação fiscal."
+            },
+            {
+              "id": "J05",
+              "cStat": 218,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "BP-e já está cancelado.",
+              "acao_corretiva": "Nada a fazer; o BP-e já está cancelado."
+            },
+            {
+              "id": "J06",
+              "cStat": 224,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "BP-e já está substituído.",
+              "acao_corretiva": "BP-e substituído não pode ser cancelado."
+            },
+            {
+              "id": "J07",
+              "cStat": 220,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Vedado cancelamento se a autorização do evento for posterior ao embarque (tolerância 5 min; contingência: até 24h após o embarque).",
+              "acao_corretiva": "Após o embarque não cabe cancelamento; se o passageiro não embarcou, registre Não Embarque (110115). O Fisco pode liberar prazo via Manifestação do Fisco."
+            },
+            {
+              "id": "J08",
+              "cStat": 222,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Número do protocolo informado difere do protocolo do BP-e.",
+              "acao_corretiva": "Informe em nProt o protocolo de autorização do BP-e."
+            },
+            {
+              "id": "J09",
+              "cStat": 504,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Existe evento de Não Embarque associado ao BP-e.",
+              "acao_corretiva": "BP-e com Não Embarque não pode ser cancelado."
+            }
+          ]
+        },
+        "110115": {
+          "nome": "Não Embarque",
+          "secao_moc": "7.2",
+          "regras": [
+            {
+              "id": "J01",
+              "cStat": 249,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "UF da chave de acesso difere da UF do Web Service.",
+              "acao_corretiva": "Envie ao autorizador da UF da chave."
+            },
+            {
+              "id": "J02",
+              "cStat": 636,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "nSeqEvento maior que o permitido (=1).",
+              "acao_corretiva": "Use nSeqEvento=1."
+            },
+            {
+              "id": "J03",
+              "cStat": 203,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Emitente deve estar habilitado para emissão de BP-e.",
+              "acao_corretiva": "Verifique o credenciamento."
+            },
+            {
+              "id": "J04",
+              "cStat": 240,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Situação fiscal irregular do emitente.",
+              "acao_corretiva": "Regularize a situação fiscal."
+            },
+            {
+              "id": "J05",
+              "cStat": 218,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "BP-e já está cancelado.",
+              "acao_corretiva": "BP-e cancelado não recebe Não Embarque."
+            },
+            {
+              "id": "J06",
+              "cStat": 224,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "BP-e está substituído.",
+              "acao_corretiva": "BP-e substituído não recebe Não Embarque."
+            },
+            {
+              "id": "J07",
+              "cStat": 221,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Data-hora do evento não pode ultrapassar 24 horas da data-hora de embarque.",
+              "acao_corretiva": "Registre o Não Embarque em até 24h após o embarque."
+            },
+            {
+              "id": "J07b",
+              "cStat": 234,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Data-hora de embarque do BP-e deve ser anterior à data de processamento do evento (no MOC também identificada como J07).",
+              "acao_corretiva": "Registre o Não Embarque somente após o horário de embarque; antes disso, use Cancelamento."
+            },
+            {
+              "id": "J08",
+              "cStat": 222,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Número do protocolo informado difere do protocolo do BP-e.",
+              "acao_corretiva": "Informe o protocolo de autorização correto."
+            }
+          ]
+        },
+        "110116": {
+          "nome": "Alteração de Poltrona",
+          "secao_moc": "7.3",
+          "regras": [
+            {
+              "id": "J01",
+              "cStat": 249,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "UF da chave de acesso difere da UF do Web Service.",
+              "acao_corretiva": "Envie ao autorizador da UF da chave."
+            },
+            {
+              "id": "J02",
+              "cStat": 636,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "nSeqEvento maior que o permitido (=99).",
+              "acao_corretiva": "Use nSeqEvento entre 1 e 99, sequencial."
+            },
+            {
+              "id": "J03",
+              "cStat": 203,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Emitente deve estar habilitado para emissão de BP-e.",
+              "acao_corretiva": "Verifique o credenciamento."
+            },
+            {
+              "id": "J04",
+              "cStat": 240,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Situação fiscal irregular do emitente.",
+              "acao_corretiva": "Regularize a situação fiscal."
+            },
+            {
+              "id": "J05",
+              "cStat": 218,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "BP-e já está cancelado.",
+              "acao_corretiva": "BP-e cancelado não admite alteração de poltrona."
+            },
+            {
+              "id": "J06",
+              "cStat": 224,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "BP-e está substituído.",
+              "acao_corretiva": "Altere a poltrona no BP-e substituto."
+            },
+            {
+              "id": "J07",
+              "cStat": 681,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Existe evento de Não Embarque associado ao BP-e.",
+              "acao_corretiva": "Não é possível alterar poltrona após Não Embarque."
+            },
+            {
+              "id": "J08",
+              "cStat": 235,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Data-hora do evento não pode ultrapassar 24 horas da data-hora de embarque.",
+              "acao_corretiva": "Prazo para alteração de poltrona excedido."
+            },
+            {
+              "id": "J09",
+              "cStat": 222,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Número do protocolo informado difere do protocolo do BP-e.",
+              "acao_corretiva": "Informe o protocolo correto."
+            },
+            {
+              "id": "J10",
+              "cStat": 237,
+              "critica": "Obrigatória",
+              "efeito": "Rejeição",
+              "regra": "Poltrona do evento deve ser diferente da poltrona atual do BP-e (considera o evento de poltrona mais recente; no ferroviário verifica apenas o primeiro trecho).",
+              "acao_corretiva": "Informe uma poltrona diferente da atual."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

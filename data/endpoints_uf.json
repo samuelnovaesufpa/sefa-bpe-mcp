@@ -1,0 +1,267 @@
+{
+  "fonte": "Estrutura conforme MOC BP-e v1.00b, seções 3.8, 4, 10.2 e 13. As URLs NÃO constam do MOC: são publicadas em https://dfe-portal.svrs.rs.gov.br/BPe/Servicos.",
+  "status": "PARCIAL — URLs da SVRS preenchidas com base no padrão público conhecido; CONFIRMAR no Portal Nacional antes de usar em produção. UFs com autorizador próprio estão pendentes.",
+  "como_obter_wsdl": "Acesse a URL do serviço seguida de '?WSDL'.",
+  "soap": {
+    "versao": "1.2",
+    "estilo": "Document/Literal",
+    "header": "não informar SOAP Header",
+    "content_type": "application/soap+xml; charset=utf-8",
+    "namespaces_wsdl": {
+      "bpeRecepcao": "http://www.portalfiscal.inf.br/bpe/wsdl/BPeRecepcao",
+      "bpeConsultaBP": "http://www.portalfiscal.inf.br/bpe/wsdl/BPeConsulta",
+      "bpeStatusServicoBP": "http://www.portalfiscal.inf.br/bpe/wsdl/BPeStatusServico",
+      "bpeRecepcaoEvento": "http://www.portalfiscal.inf.br/bpe/wsdl/BPeRecepcaoEvento"
+    },
+    "compactacao": {
+      "bpeRecepcao": "GZip + Base64",
+      "bpeConsultaBP": "XML puro",
+      "bpeStatusServicoBP": "XML puro",
+      "bpeRecepcaoEvento": "XML puro"
+    }
+  },
+  "consultaCadastro": {
+    "observacao": "Web Service da NF-e (NFeConsultaCadastro / CadConsultaCadastro4). Definições e schemas em http://www.nfe.fazenda.gov.br. Disponibilidade menor; não usar no fluxo normal de emissão.",
+    "por_uf": "PENDENTE — preencher com as URLs de cadastro da NF-e de cada UF"
+  },
+  "autorizadores": {
+    "SVRS": {
+      "descricao": "SEFAZ Virtual do Rio Grande do Sul (atende UFs sem autorizador próprio)",
+      "tipo_autorizador_protocolo": 3,
+      "producao": {
+        "bpeRecepcao": "https://bpe.svrs.rs.gov.br/ws/bpeRecepcao/bpeRecepcao.asmx",
+        "bpeConsultaBP": "https://bpe.svrs.rs.gov.br/ws/bpeConsulta/bpeConsulta.asmx",
+        "bpeStatusServicoBP": "https://bpe.svrs.rs.gov.br/ws/bpeStatusServico/bpeStatusServico.asmx",
+        "bpeRecepcaoEvento": "https://bpe.svrs.rs.gov.br/ws/bpeRecepcaoEvento/bpeRecepcaoEvento.asmx",
+        "qrCode": "https://dfe-portal.svrs.rs.gov.br/bpe/qrCode",
+        "consultaPublica": "https://dfe-portal.svrs.rs.gov.br/bpe/consulta"
+      },
+      "homologacao": {
+        "bpeRecepcao": "https://bpe-homologacao.svrs.rs.gov.br/ws/bpeRecepcao/bpeRecepcao.asmx",
+        "bpeConsultaBP": "https://bpe-homologacao.svrs.rs.gov.br/ws/bpeConsulta/bpeConsulta.asmx",
+        "bpeStatusServicoBP": "https://bpe-homologacao.svrs.rs.gov.br/ws/bpeStatusServico/bpeStatusServico.asmx",
+        "bpeRecepcaoEvento": "https://bpe-homologacao.svrs.rs.gov.br/ws/bpeRecepcaoEvento/bpeRecepcaoEvento.asmx",
+        "qrCode": "https://dfe-portal.svrs.rs.gov.br/bpe/qrCode",
+        "consultaPublica": "https://dfe-portal.svrs.rs.gov.br/bpe/consulta"
+      }
+    }
+  },
+  "ufs": [
+    {
+      "cUF": "11",
+      "UF": "RO",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "12",
+      "UF": "AC",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "13",
+      "UF": "AM",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "14",
+      "UF": "RR",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "15",
+      "UF": "PA",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "16",
+      "UF": "AP",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "17",
+      "UF": "TO",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "21",
+      "UF": "MA",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "22",
+      "UF": "PI",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "23",
+      "UF": "CE",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "24",
+      "UF": "RN",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "25",
+      "UF": "PB",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "26",
+      "UF": "PE",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "27",
+      "UF": "AL",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "28",
+      "UF": "SE",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "29",
+      "UF": "BA",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "31",
+      "UF": "MG",
+      "autorizador": "PENDENTE",
+      "observacao": "Autorizador próprio (SEFAZ/MG)",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "32",
+      "UF": "ES",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "33",
+      "UF": "RJ",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "35",
+      "UF": "SP",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "41",
+      "UF": "PR",
+      "autorizador": "PENDENTE",
+      "observacao": "Autorizador próprio (SEFAZ/PR)",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "42",
+      "UF": "SC",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "43",
+      "UF": "RS",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "50",
+      "UF": "MS",
+      "autorizador": "PENDENTE",
+      "observacao": "Autorizador próprio (SEFAZ/MS)",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "51",
+      "UF": "MT",
+      "autorizador": "PENDENTE",
+      "observacao": "Autorizador próprio (SEFAZ/MT)",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "52",
+      "UF": "GO",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    },
+    {
+      "cUF": "53",
+      "UF": "DF",
+      "autorizador": "SVRS",
+      "observacao": "Confirmar adesão ao BP-e e autorizador no Portal Nacional",
+      "producao": null,
+      "homologacao": null
+    }
+  ]
+}

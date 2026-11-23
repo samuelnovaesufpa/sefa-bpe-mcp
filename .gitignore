@@ -1,0 +1,29 @@
+# Variáveis de ambiente e segredos
+.env
+.env.local
+.env.*.local
+
+# Certificados digitais e chaves privadas (NUNCA versionar)
+*.pfx
+*.p12
+*.pem
+*.key
+*.crt
+*.cer
+certs/
+
+# XMLs emitidos / logs sensíveis
+logs/
+*.log
+tmp/
+xml_emitidos/
+
+# Dependências e builds
+node_modules/
+dist/
+coverage/
+
+# Editor / SO
+.DS_Store
+.vscode/
+.idea/
