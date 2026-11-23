@@ -30,7 +30,7 @@
     "bilhete-de-passagem",
     "dfe"
   ],
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "private": true,
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.2",
